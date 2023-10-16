@@ -9,9 +9,15 @@ import {
   CNavGroup,
   CSidebarToggler,
 } from "@coreui/react";
-import { MdSpaceDashboard } from "react-icons/md";
+import {
+  MdSpaceDashboard,
+  MdLeaderboard,
+  MdOutlineAdminPanelSettings,
+  MdSupervisedUserCircle,
+  MdHomeRepairService,
+} from "react-icons/md";
 import { AiOutlinePullRequest } from "react-icons/ai";
-import { GrUserAdmin, GrUserManager, GrServices } from "react-icons/gr";
+
 import { Box } from "@mui/material";
 import "./Sidebar.css";
 
@@ -35,10 +41,10 @@ export default function Sidebar() {
       },
       {
         id: 2,
-        menu: "Admin",
-        link: "/admin",
+        menu: "Leads",
+        link: "/leads",
         icon: (
-          <GrUserAdmin
+          <MdLeaderboard
             customClassName="nav-icon"
             style={{ marginRight: "10px" }}
             color={"#ffffff"}
@@ -47,10 +53,10 @@ export default function Sidebar() {
       },
       {
         id: 3,
-        menu: "Employee",
-        link: "/employee",
+        menu: "Admin",
+        link: "/admin",
         icon: (
-          <GrUserManager
+          <MdOutlineAdminPanelSettings
             customClassName="nav-icon"
             style={{ marginRight: "10px" }}
             color={"#ffffff"}
@@ -59,10 +65,10 @@ export default function Sidebar() {
       },
       {
         id: 4,
-        menu: "Website Service",
-        link: "/website_service",
+        menu: "Employee",
+        link: "/employee",
         icon: (
-          <GrServices
+          <MdSupervisedUserCircle
             customClassName="nav-icon"
             style={{ marginRight: "10px" }}
             color={"#ffffff"}
@@ -71,6 +77,18 @@ export default function Sidebar() {
       },
       {
         id: 5,
+        menu: "Website Service",
+        link: "/website_service",
+        icon: (
+          <MdHomeRepairService
+            customClassName="nav-icon"
+            style={{ marginRight: "10px" }}
+            color={"#ffffff"}
+          />
+        ),
+      },
+      {
+        id: 6,
         menu: "Website Request",
         link: "/website_request",
         icon: (
@@ -92,7 +110,7 @@ export default function Sidebar() {
     <div style={{ padding: "0px", margin: "0px" }}>
       <Box md={{ width: "100%" }}>
         <CSidebar
-          style={{ width: "100%" }}
+          style={{ width: "105%" }}
           className="adminSidebar"
           colorScheme="dark"
         >

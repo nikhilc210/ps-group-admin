@@ -1,11 +1,10 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Header from "../../Component/Common/Header/Header";
-import "./Dashboard.css";
 import Sidebar from "../../Component/Common/Sidebar/Sidebar";
-import DashboardCounter from "../../Component/DashboardCounter/DashboardCounter";
+import LeadsCounter from "../../Component/LeadsCounter/LeadsCounter";
 
-export default function Dashboard() {
+export default function Leads() {
   return (
     <Container fluid className={"mainContainer"}>
       <Row>
@@ -15,7 +14,9 @@ export default function Dashboard() {
         <Col md={10}>
           <Header />
           <main>
-            <DashboardCounter />
+            <Container fluid>
+              <LeadsCounter />
+            </Container>
           </main>
         </Col>
       </Row>
