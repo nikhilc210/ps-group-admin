@@ -2,9 +2,10 @@ import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Header from "../../Component/Common/Header/Header";
 import Sidebar from "../../Component/Common/Sidebar/Sidebar";
-import AdminList from "./AdminList";
+import CreateEmployeeForm from "../../Component/CreateEmployeeForm/CreateEmployeeForm";
+import CreateWebsiteServiceForm from "../../Component/WebsiteService/CreateWebsiteServiceForm";
 
-export default function Admin() {
+export default function CreateEmployee() {
   return (
     <Container fluid className={"mainContainer"}>
       <Row>
@@ -15,7 +16,7 @@ export default function Admin() {
           <Header />
           <main>
             <Container fluid>
-              <AdminList />
+              <CreateWebsiteServiceForm />
             </Container>
           </main>
         </Col>

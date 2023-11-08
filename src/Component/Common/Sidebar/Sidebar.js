@@ -99,6 +99,30 @@ export default function Sidebar() {
           />
         ),
       },
+      {
+        id: 7,
+        menu: "Employee Attandance",
+        link: "/attandance",
+        icon: (
+          <AiOutlinePullRequest
+            customClassName="nav-icon"
+            style={{ marginRight: "10px" }}
+            color={"#ffffff"}
+          />
+        ),
+      },
+      {
+        id: 8,
+        menu: "Leave Application",
+        link: "/leave_application",
+        icon: (
+          <AiOutlinePullRequest
+            customClassName="nav-icon"
+            style={{ marginRight: "10px" }}
+            color={"#ffffff"}
+          />
+        ),
+      },
     ]);
   };
 

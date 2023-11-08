@@ -3,8 +3,9 @@ import { Container, Row, Col } from "react-bootstrap";
 import Header from "../../Component/Common/Header/Header";
 import Sidebar from "../../Component/Common/Sidebar/Sidebar";
 import AdminList from "./AdminList";
+import CreateAdminForm from "../../Component/CreateAdminForm/CreateAdminForm";
 
-export default function Admin() {
+export default function CreateAdmin() {
   return (
     <Container fluid className={"mainContainer"}>
       <Row>
@@ -15,7 +16,7 @@ export default function Admin() {
           <Header />
           <main>
             <Container fluid>
-              <AdminList />
+              <CreateAdminForm />
             </Container>
           </main>
         </Col>
