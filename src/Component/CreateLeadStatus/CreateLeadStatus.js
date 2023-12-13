@@ -15,12 +15,12 @@ import { Grid, Box } from "@mui/material";
 import { psApiCalling } from "../API/Index";
 const { Option } = Select;
 
-export default function CreateWebsiteServiceForm() {
+export default function CreateLeadStatus() {
   const onChangeDate = (v) => {};
   const onFinish = (values) => {
     let params = {
-      action: "CREATE_SERVICE",
-      service_name: values.service_name,
+      action: "CREATE_STATUS",
+      lead_status: values.lead_status,
     };
     psApiCalling(params).then((res) => {
       if (res.status === "success") {
@@ -49,7 +49,7 @@ export default function CreateWebsiteServiceForm() {
             style={{ marginTop: "0px" }}
           >
             <Card
-              title="Create Website Service"
+              title="Create Lead Status"
               style={{
                 width: "100%",
                 marginLeft: "1%",
@@ -68,12 +68,12 @@ export default function CreateWebsiteServiceForm() {
                 }}
               >
                 <Form.Item
-                  label="Website Service Name"
-                  name="service_name"
+                  label="Lead Status Name"
+                  name="lead_status"
                   rules={[
                     {
                       required: true,
-                      message: "Service name is required",
+                      message: "Lead status is required",
                     },
                   ]}
                   style={{
@@ -81,7 +81,7 @@ export default function CreateWebsiteServiceForm() {
                     width: "calc(50% - 8px)",
                   }}
                 >
-                  <Input placeholder="Service Name" />
+                  <Input placeholder="Lead Status" />
                 </Form.Item>
                 <Form.Item label=" " colon={false}>
                   <Button
@@ -89,7 +89,7 @@ export default function CreateWebsiteServiceForm() {
                     htmlType="submit"
                     style={{ width: "50%", background: "#3E4095" }}
                   >
-                    Create Website Service
+                    Create Status
                   </Button>
                 </Form.Item>
               </Form>

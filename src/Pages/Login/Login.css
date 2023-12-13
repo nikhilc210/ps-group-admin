@@ -1,0 +1,78 @@
+.main-container-login {
+  height: 100vh;
+}
+
+.input-holder {
+  min-height: 100vh;
+  background-color: #3e4095;
+}
+
+.logo-holder {
+  padding: 10px;
+}
+
+.logo {
+  height: 110px;
+}
+
+.animation-image {
+  width: 50%;
+}
+
+.animation-holder {
+  min-height: 85vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.welcome-text-container {
+  padding: 10px;
+  margin-top: 50px;
+}
+
+.login-form-container {
+  min-height: 85vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.welcome-text {
+  font-weight: 800;
+  color: #ffffff;
+}
+.welcome-text-para {
+  color: #ffffff;
+}
+
+.login-input {
+  width: 100%;
+  height: 50px;
+  border-radius: 0px;
+  background-color: #ffffff !important;
+  border: 0px;
+  color: #000;
+}
+
+.login-input:hover {
+  background-color: #313030b5;
+}
+.login-input::before {
+  background-color: #313030b5;
+}
+.login-input::after {
+  background-color: #313030b5;
+}
+.login-input::placeholder {
+  color: #ffffff;
+}
+[title="Email Address"] {
+  color: #ffffff !important;
+}
+
+[title="Account Type"] {
+  color: #ffffff !important;
+}
+[title="User Password"] {
+  color: #ffffff !important;
+}

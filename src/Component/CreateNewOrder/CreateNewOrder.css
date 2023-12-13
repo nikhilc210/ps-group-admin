@@ -1,0 +1,38 @@
+.days_button {
+  width: 55px;
+  height: 55px;
+  background-color: rgba(128, 128, 128, 0.205);
+  display: flex;
+  margin: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  justify-content: center;
+}
+
+.week_name {
+  font-size: 12px;
+  font-weight: 400;
+  color: black;
+}
+
+.initial {
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.days_button_checked {
+  width: 55px;
+  height: 55px;
+  background-color: #3e4095;
+  display: flex;
+  margin: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  justify-content: center;
+}
+
+.initial_checked {
+  margin-top: 15px;
+  font-weight: bold;
+  color: #ffffff;
+}

@@ -3,44 +3,39 @@ import { Grid, Box } from "@mui/material";
 import { Card, Space, Button, Tag } from "antd";
 import { ToastContainer, toast } from "react-toastify";
 import Table from "../../Component/Table/Table";
-import { psApiCalling } from "../API/Index";
-export default function WebsiteService() {
+import { psApiCalling } from "../../Component/API/Index";
+
+export default function LeadList() {
   const [data, setData] = useState([]);
   const [col, setCol] = useState([
     {
       title: "ID",
+      dataIndex: "id",
       key: "id",
-      render: (item) => <p>{item.id}</p>,
     },
     {
-      title: "Service Name",
-      key: "service_name",
-      render: (item) => <Tag color="green">{item.name}</Tag>,
-    },
-    {
-      title: "Service Image",
-      key: "service_image",
-      render: (item) => <></>,
-    },
-    {
-      title: "Service Desc",
-      key: "desc",
-      render: (item) => <></>,
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
     },
     {
       title: "Action",
       key: "action",
-      render: (item) => <></>,
+      render: (_, record) => <></>,
     },
   ]);
 
-  useEffect(() => {
-    let params = { action: "GET_SERVICE_LIST" };
+  const getLeadList = () => {
+    let params = { action: "GET_LEAD_LIST" };
     psApiCalling(params).then((res) => {
       if (Array.isArray(res)) {
         setData(res);
       }
     });
+  };
+
+  useEffect(() => {
+    getLeadList();
   }, []);
 
   return (
@@ -61,13 +56,13 @@ export default function WebsiteService() {
             style={{ marginTop: "0px" }}
           >
             <Card
-              title="Website Service"
+              title="Lead Status"
               extra={
                 <Button
-                  href="/createWebsiteService"
+                  href="/createLeadStatus"
                   style={{ background: "#5f27cd", color: "#FFFFFF" }}
                 >
-                  Create Website Service
+                  Create Lead Status
                 </Button>
               }
               style={{

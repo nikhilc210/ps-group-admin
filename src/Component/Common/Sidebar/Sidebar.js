@@ -15,8 +15,11 @@ import {
   MdOutlineAdminPanelSettings,
   MdSupervisedUserCircle,
   MdHomeRepairService,
+  MdOutlineFavoriteBorder,
 } from "react-icons/md";
 import { AiOutlinePullRequest } from "react-icons/ai";
+import { GrStatusGood } from "react-icons/gr";
+import { FaIndustry } from "react-icons/fa";
 
 import { Box } from "@mui/material";
 import "./Sidebar.css";
@@ -24,6 +27,21 @@ import "./Sidebar.css";
 export default function Sidebar() {
   const [menu, setMenu] = useState([]);
   const [name, setName] = useState("");
+  const [id, setId] = useState("");
+
+  const getSession = () => {
+    let uid = localStorage.getItem("psAdminSessionID");
+    let uname = localStorage.getItem("psAdminSessionName");
+
+    if (uid === null) {
+      window.location.href = "/";
+    } else {
+      setName(uname);
+    }
+  };
+  useEffect(() => {
+    getSession();
+  });
 
   const menuUpdate = () => {
     setMenu([
@@ -53,6 +71,18 @@ export default function Sidebar() {
       },
       {
         id: 3,
+        menu: "Orders",
+        link: "/orders",
+        icon: (
+          <MdOutlineFavoriteBorder
+            customClassName="nav-icon"
+            style={{ marginRight: "10px" }}
+            color={"#ffffff"}
+          />
+        ),
+      },
+      {
+        id: 4,
         menu: "Admin",
         link: "/admin",
         icon: (
@@ -64,7 +94,7 @@ export default function Sidebar() {
         ),
       },
       {
-        id: 4,
+        id: 5,
         menu: "Employee",
         link: "/employee",
         icon: (
@@ -76,7 +106,19 @@ export default function Sidebar() {
         ),
       },
       {
-        id: 5,
+        id: 6,
+        menu: "App Users",
+        link: "/app_users",
+        icon: (
+          <MdSupervisedUserCircle
+            customClassName="nav-icon"
+            style={{ marginRight: "10px" }}
+            color={"#ffffff"}
+          />
+        ),
+      },
+      {
+        id: 7,
         menu: "Website Service",
         link: "/website_service",
         icon: (
@@ -88,7 +130,7 @@ export default function Sidebar() {
         ),
       },
       {
-        id: 6,
+        id: 8,
         menu: "Website Request",
         link: "/website_request",
         icon: (
@@ -100,7 +142,7 @@ export default function Sidebar() {
         ),
       },
       {
-        id: 7,
+        id: 9,
         menu: "Employee Attandance",
         link: "/attandance",
         icon: (
@@ -112,13 +154,37 @@ export default function Sidebar() {
         ),
       },
       {
-        id: 8,
+        id: 10,
         menu: "Leave Application",
         link: "/leave_application",
         icon: (
           <AiOutlinePullRequest
             customClassName="nav-icon"
             style={{ marginRight: "10px" }}
+            color={"#ffffff"}
+          />
+        ),
+      },
+      {
+        id: 11,
+        menu: "Lead Status",
+        link: "/lead_status",
+        icon: (
+          <GrStatusGood
+            customClassName="nav-icon"
+            style={{ marginRight: "10px", color: "#FFF" }}
+            color={"#ffffff"}
+          />
+        ),
+      },
+      {
+        id: 12,
+        menu: "Industry Type",
+        link: "/industry_type",
+        icon: (
+          <FaIndustry
+            customClassName="nav-icon"
+            style={{ marginRight: "10px", color: "#FFF" }}
             color={"#ffffff"}
           />
         ),
@@ -134,7 +200,12 @@ export default function Sidebar() {
     <div style={{ padding: "0px", margin: "0px" }}>
       <Box md={{ width: "100%" }}>
         <CSidebar
-          style={{ width: "105%" }}
+          style={{
+            width: "105%",
+            minHeight: "100vh",
+            position: "relative",
+            padding: "10px",
+          }}
           className="adminSidebar"
           colorScheme="dark"
         >
@@ -143,7 +214,10 @@ export default function Sidebar() {
             return (
               <CSidebarNav
                 key={item.id}
-                style={{ display: "flex", overflow: "auto" }}
+                style={{
+                  display: "flex",
+                  overflow: "auto",
+                }}
               >
                 <CNavItem href={item.link}>
                   {item.icon} {item.menu}

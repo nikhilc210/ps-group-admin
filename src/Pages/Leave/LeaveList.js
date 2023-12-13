@@ -3,44 +3,94 @@ import { Grid, Box } from "@mui/material";
 import { Card, Space, Button, Tag } from "antd";
 import { ToastContainer, toast } from "react-toastify";
 import Table from "../../Component/Table/Table";
-import { psApiCalling } from "../API/Index";
-export default function WebsiteService() {
+import { psApiCalling } from "../../Component/API/Index";
+
+export default function LeadList() {
   const [data, setData] = useState([]);
   const [col, setCol] = useState([
     {
       title: "ID",
+      dataIndex: "id",
       key: "id",
-      render: (item) => <p>{item.id}</p>,
     },
     {
-      title: "Service Name",
-      key: "service_name",
+      title: "Employee Name",
+
+      key: "name",
       render: (item) => <Tag color="green">{item.name}</Tag>,
     },
     {
-      title: "Service Image",
-      key: "service_image",
-      render: (item) => <></>,
+      title: "Type",
+      key: "type",
+      render: (item) => <Tag color="yellow">{item.type}</Tag>,
     },
     {
-      title: "Service Desc",
-      key: "desc",
-      render: (item) => <></>,
+      title: "No. Days",
+
+      key: "days",
+      render: (item) => <Tag color="blue">{item.days}</Tag>,
+    },
+    {
+      title: "From Date",
+
+      key: "from",
+      render: (item) => <Tag color="purple">{item.from}</Tag>,
+    },
+    {
+      title: "To Date",
+
+      key: "to",
+      render: (item) => <Tag color="black">{item.to}</Tag>,
+    },
+    {
+      title: "Reason",
+      dataIndex: "reason",
+      key: "reason",
+    },
+
+    {
+      title: "Submitted Time",
+
+      key: "time",
+      render: (item) => <Tag color="red">{item.time}</Tag>,
+    },
+    {
+      title: "Status",
+
+      key: "status",
+      render: (item) => (
+        <>
+          {item.status === "0" ? (
+            <Tag color="red">Not Approved</Tag>
+          ) : (
+            <Tag color="green">Approved</Tag>
+          )}
+        </>
+      ),
+    },
+    {
+      title: "Approved By",
+
+      key: "by",
     },
     {
       title: "Action",
       key: "action",
-      render: (item) => <></>,
+      render: (_, record) => <></>,
     },
   ]);
 
-  useEffect(() => {
-    let params = { action: "GET_SERVICE_LIST" };
+  const getLeadList = () => {
+    let params = { action: "GET_LEAVE_LIST" };
     psApiCalling(params).then((res) => {
       if (Array.isArray(res)) {
         setData(res);
       }
     });
+  };
+
+  useEffect(() => {
+    getLeadList();
   }, []);
 
   return (
@@ -61,19 +111,12 @@ export default function WebsiteService() {
             style={{ marginTop: "0px" }}
           >
             <Card
-              title="Website Service"
-              extra={
-                <Button
-                  href="/createWebsiteService"
-                  style={{ background: "#5f27cd", color: "#FFFFFF" }}
-                >
-                  Create Website Service
-                </Button>
-              }
+              title="Leave Application"
               style={{
                 width: "98%",
                 marginLeft: "1%",
                 marginTop: "30px",
+                overflow: "scroll",
               }}
             >
               <Table data={data} col={col} />

@@ -1,13 +1,84 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form, Input, Select, Space, Tooltip, Typography } from "antd";
 import { Card, Tag } from "antd";
 import { ToastContainer, toast } from "react-toastify";
 import { Grid, Box } from "@mui/material";
+import { psApiCalling } from "../API/Index";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+
 const { Option } = Select;
-const onFinish = (values) => {
-  console.log("Received values of form: ", values);
-};
+
 export default function CreateLeadForm() {
+  const [statusList, setStatusList] = useState([]);
+  const [industryList, setIndustryList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onFinish = (values) => {
+    console.log("Received values of form: ", values);
+    let client_id = "PS" + Math.floor(100000 + Math.random() * 900000);
+    setIsLoading(true);
+    let params = {
+      client_name: values.client_name,
+      client_email: values.client_email,
+      client_phone: values.client_phone,
+      client_gst: values.client_gst,
+      industry_type: values.industry_type,
+      status: values.status,
+      site_name: values.site_name,
+      client_id: client_id,
+      action: "CREATE_LEAD",
+    };
+    psApiCalling(params).then((res) => {
+      setIsLoading(false);
+      if (res.status === "success") {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+      }
+    });
+  };
+
+  const getStatusList = () => {
+    let params = { action: "GET_LEAD_LIST" };
+    psApiCalling(params).then((res) => {
+      if (Array.isArray(res)) {
+        setStatusList(
+          res.map((item) => {
+            return {
+              id: item.id,
+              value: item.status,
+            };
+          })
+        );
+      }
+    });
+  };
+
+  const getIndustryList = () => {
+    let params = { action: "GET_INDUSTRY_TYPE_LIST" };
+    psApiCalling(params).then((res) => {
+      if (Array.isArray(res)) {
+        setIndustryList(
+          res.map((item) => {
+            return {
+              id: item.id,
+              value: item.type,
+            };
+          })
+        );
+      }
+    });
+  };
+
+  useEffect(() => {
+    getStatusList();
+  }, []);
+
+  useEffect(() => {
+    getIndustryList();
+  }, []);
+
   return (
     <Box>
       <Box md={{ width: "100%" }} style={{ marginTop: "8px" }}>
@@ -142,7 +213,7 @@ export default function CreateLeadForm() {
                         width: "100%",
                       }}
                       onChange={() => {}}
-                      options={[]}
+                      options={industryList}
                     />
                   </Form.Item>
                   <Form.Item
@@ -166,7 +237,7 @@ export default function CreateLeadForm() {
                         width: "100%",
                       }}
                       onChange={() => {}}
-                      options={[]}
+                      options={statusList}
                     />
                   </Form.Item>
                 </Form.Item>
@@ -193,91 +264,28 @@ export default function CreateLeadForm() {
                     <Input placeholder="Site Name" />
                   </Form.Item>
                 </Form.Item>
-
-                <Form.Item
-                  style={{
-                    marginBottom: 0,
-                  }}
-                >
-                  <Form.Item
-                    label="Contact Person Name"
-                    name="contact_person_name"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Contact Person Name is required",
-                      },
-                    ]}
-                    style={{
-                      display: "inline-block",
-                      width: "calc(32.8% - 8px)",
-                    }}
-                  >
-                    <Input placeholder="Name" />
+                {isLoading ? (
+                  <Spin
+                    indicator={
+                      <LoadingOutlined
+                        style={{
+                          fontSize: 24,
+                        }}
+                        spin
+                      />
+                    }
+                  />
+                ) : (
+                  <Form.Item label=" " colon={false}>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      style={{ width: "100%", background: "#3E4095" }}
+                    >
+                      Create Client
+                    </Button>
                   </Form.Item>
-                  <Form.Item
-                    label="Contact Person Number"
-                    name="contact_person_phone"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Contact Person Number is required",
-                      },
-                    ]}
-                    style={{
-                      display: "inline-block",
-                      width: "calc(32.8% - 8px)",
-                      margin: "0 8px",
-                    }}
-                  >
-                    <Input placeholder="Contact Person Phone" />
-                  </Form.Item>
-                  <Form.Item
-                    label="Contact Person Email"
-                    name="contact_person_email"
-                    rules={[]}
-                    style={{
-                      display: "inline-block",
-                      width: "calc(32.8% - 8px)",
-                      margin: "0 8px",
-                    }}
-                  >
-                    <Input placeholder="Email" />
-                  </Form.Item>
-                </Form.Item>
-
-                <Form.Item
-                  style={{
-                    marginBottom: 0,
-                  }}
-                >
-                  <Form.Item
-                    label="Site Address"
-                    name="site_address"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Site Address is required",
-                      },
-                    ]}
-                    style={{
-                      display: "inline-block",
-                      width: "calc(100% - 8px)",
-                    }}
-                  >
-                    <Input placeholder="Site Address" />
-                  </Form.Item>
-                </Form.Item>
-
-                <Form.Item label=" " colon={false}>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    style={{ width: "100%", background: "#3E4095" }}
-                  >
-                    Create Client
-                  </Button>
-                </Form.Item>
+                )}
               </Form>
             </Card>
           </Grid>

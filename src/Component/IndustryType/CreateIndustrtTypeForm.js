@@ -15,12 +15,12 @@ import { Grid, Box } from "@mui/material";
 import { psApiCalling } from "../API/Index";
 const { Option } = Select;
 
-export default function CreateWebsiteServiceForm() {
+export default function CreateIndustryTypeForm() {
   const onChangeDate = (v) => {};
   const onFinish = (values) => {
     let params = {
-      action: "CREATE_SERVICE",
-      service_name: values.service_name,
+      action: "CREATE_INDUSTRY_TYPE",
+      industry_type: values.industry_type,
     };
     psApiCalling(params).then((res) => {
       if (res.status === "success") {
@@ -49,7 +49,7 @@ export default function CreateWebsiteServiceForm() {
             style={{ marginTop: "0px" }}
           >
             <Card
-              title="Create Website Service"
+              title="Create Industry Type"
               style={{
                 width: "100%",
                 marginLeft: "1%",
@@ -68,12 +68,12 @@ export default function CreateWebsiteServiceForm() {
                 }}
               >
                 <Form.Item
-                  label="Website Service Name"
-                  name="service_name"
+                  label="Industry Type"
+                  name="industry_type"
                   rules={[
                     {
                       required: true,
-                      message: "Service name is required",
+                      message: "Industry type is required",
                     },
                   ]}
                   style={{
@@ -81,7 +81,7 @@ export default function CreateWebsiteServiceForm() {
                     width: "calc(50% - 8px)",
                   }}
                 >
-                  <Input placeholder="Service Name" />
+                  <Input placeholder="Industrt type" />
                 </Form.Item>
                 <Form.Item label=" " colon={false}>
                   <Button
@@ -89,7 +89,7 @@ export default function CreateWebsiteServiceForm() {
                     htmlType="submit"
                     style={{ width: "50%", background: "#3E4095" }}
                   >
-                    Create Website Service
+                    Create Industry Type
                   </Button>
                 </Form.Item>
               </Form>
