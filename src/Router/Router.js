@@ -27,6 +27,9 @@ import EditAppUser from "../Pages/AppUser/EditAppUser";
 import CreateLeadStatus from "../Pages/LeadStatus/CreateLeadStatus";
 import CreateIndustryType from "../Pages/IndustryType/CreateIndustryType";
 import Login from "../Pages/Login/Login";
+import ViewService from "../Pages/ViewService/ViewService";
+import ManageSchedule from "../Pages/ManageSchedule/ManageSchedule";
+import CurrentService from "../Pages/CurrentService/CurrentService";
 export default function Index() {
   return (
     <Router>
@@ -67,6 +70,12 @@ export default function Index() {
           path="/createIndustryType"
           element={<CreateIndustryType />}
         ></Route>
+        <Route path="/viewService/:id/:oid" element={<ViewService />}></Route>
+        <Route
+          path="/manageSchedule/:id/:oid"
+          element={<ManageSchedule />}
+        ></Route>
+        <Route path="/currentService" element={<CurrentService />}></Route>
       </Routes>
     </Router>
   );

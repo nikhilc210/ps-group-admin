@@ -6,8 +6,7 @@ import Table from "../../Component/Table/Table";
 import { psApiCalling } from "../../Component/API/Index";
 import moment from "moment";
 
-export default function ScheduleList(props) {
-  const { oid, clientName } = props;
+export default function CurrentServiceList(props) {
   const [data, setData] = useState([]);
   const [col, setCol] = useState([
     {
@@ -54,14 +53,14 @@ export default function ScheduleList(props) {
           {item.status === "Pending" ? (
             <Button
               type="primary"
-              href={"/manageSchedule/" + item.id + "/" + oid}
+              href={"/manageSchedule/" + item.id + "/" + item.oid}
             >
               Manage Schedule
             </Button>
           ) : (
             <Button
               type="primary"
-              href={"/viewService/" + item.id + "/" + oid}
+              href={"/viewService/" + item.id + "/" + item.oid}
               style={{ background: "#0be881" }}
             >
               View Service
@@ -73,7 +72,7 @@ export default function ScheduleList(props) {
   ]);
 
   const getLeadList = () => {
-    let params = { action: "GET_SCHEDULE_LIST", oid: oid };
+    let params = { action: "GET_TODAY_SCHEDULE_LIST" };
     psApiCalling(params).then((res) => {
       if (Array.isArray(res)) {
         setData(res);
@@ -89,6 +88,12 @@ export default function ScheduleList(props) {
   useEffect(() => {
     getLeadList();
   }, []);
+
+  const today = () => {
+    let today = moment().toString();
+    let format = moment(today).format("DD-MM-YYYY");
+    return format;
+  };
 
   return (
     <Box>
@@ -111,7 +116,7 @@ export default function ScheduleList(props) {
             style={{ marginTop: "0px" }}
           >
             <Card
-              title={clientName + " Schedule"}
+              title={"Today's (" + today() + ") Schedule"}
               style={{
                 width: "98%",
                 marginLeft: "1%",

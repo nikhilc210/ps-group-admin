@@ -17,9 +17,11 @@ import {
   MdHomeRepairService,
   MdOutlineFavoriteBorder,
 } from "react-icons/md";
+import { CgCalendarToday } from "react-icons/cg";
 import { AiOutlinePullRequest } from "react-icons/ai";
 import { GrStatusGood } from "react-icons/gr";
 import { FaIndustry } from "react-icons/fa";
+import { TbStatusChange } from "react-icons/tb";
 
 import { Box } from "@mui/material";
 import "./Sidebar.css";
@@ -48,9 +50,21 @@ export default function Sidebar() {
       {
         id: 1,
         menu: "Dashboard",
-        link: "/",
+        link: "/dashboard",
         icon: (
           <MdSpaceDashboard
+            customClassName="nav-icon"
+            style={{ marginRight: "10px" }}
+            color={"#ffffff"}
+          />
+        ),
+      },
+      {
+        id: 13,
+        menu: "Today's Service",
+        link: "/currentService",
+        icon: (
+          <CgCalendarToday
             customClassName="nav-icon"
             style={{ marginRight: "10px" }}
             color={"#ffffff"}
@@ -170,7 +184,7 @@ export default function Sidebar() {
         menu: "Lead Status",
         link: "/lead_status",
         icon: (
-          <GrStatusGood
+          <TbStatusChange
             customClassName="nav-icon"
             style={{ marginRight: "10px", color: "#FFF" }}
             color={"#ffffff"}
@@ -191,7 +205,7 @@ export default function Sidebar() {
       },
     ]);
   };
-
+  //14
   useEffect(() => {
     menuUpdate();
   }, []);
