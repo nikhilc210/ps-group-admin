@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import Table from "../../Component/Table/Table";
 import { psApiCalling } from "../../Component/API/Index";
 import { useNavigate } from "react-router-dom";
-export default function AppUserList() {
+export default function ManagerList() {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   const [col, setCol] = useState([
@@ -116,7 +116,7 @@ export default function AppUserList() {
   ]);
 
   const getAppUserList = () => {
-    let params = { action: "GET_APP_USER_LIST" };
+    let params = { action: "GET_MANAGER_LIST" };
     psApiCalling(params).then((res) => {
       if (Array.isArray(res)) {
         setData(res);
@@ -146,13 +146,13 @@ export default function AppUserList() {
             sx={{ flexDirection: { xs: "column", md: "row" } }}
           >
             <Card
-              title="App User List"
+              title="Manager List"
               extra={
                 <Button
-                  href="/createAppUser"
+                  href="/createManager"
                   style={{ background: "#5f27cd", color: "#FFFFFF" }}
                 >
-                  Create New User
+                  Create New Manager
                 </Button>
               }
               style={{

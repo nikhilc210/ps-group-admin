@@ -17,17 +17,22 @@ export default function EmployeeList() {
     {
       title: "Employee Code",
       key: "code",
-      render: (_, record) => <Tag color={"purple"}>{_.data.employee_code}</Tag>,
+      render: (_, record) => <Tag color={"purple"}>{_.data.user_code}</Tag>,
     },
     {
       title: "Fullname",
       key: "fullname",
-      render: (_, record) => <>{_.data.employee_name}</>,
+      render: (_, record) => <>{_.data.full_name}</>,
     },
     {
       title: "Email Address",
       key: "emailAddress",
-      render: (_, record) => <Tag color={"green"}>{_.data.employee_email}</Tag>,
+      render: (_, record) => <Tag color={"green"}>{_.data.user_email}</Tag>,
+    },
+    {
+      title: "Employee Type",
+      key: "type",
+      render: (_, record) => <Tag color={"#b8e994"}>{_.data.user_type}</Tag>,
     },
     {
       title: "Phone Number",
@@ -37,21 +42,17 @@ export default function EmployeeList() {
     {
       title: "Employee DOB",
       key: "dob",
-      render: (_, record) => <Tag color={"#16a085"}>{_.data.employee_dob}</Tag>,
+      render: (_, record) => <Tag color={"#16a085"}>{_.data.user_dob}</Tag>,
     },
     {
       title: "Employee Gender",
       key: "gender",
-      render: (_, record) => (
-        <Tag color={"#d35400"}>{_.data.employee_gender}</Tag>
-      ),
+      render: (_, record) => <Tag color={"#d35400"}>{_.data.user_gender}</Tag>,
     },
     {
-      title: "Employee Type",
+      title: "Employee Role",
       key: "type",
-      render: (_, record) => (
-        <Tag color={"#b8e994"}>{_.data.employee_type}</Tag>
-      ),
+      render: (_, record) => <Tag color={"#b8e994"}>{_.data.employe_role}</Tag>,
     },
     {
       title: "Created Time",
@@ -116,7 +117,7 @@ export default function EmployeeList() {
           md={{ flexDirection: { xs: "column", md: "row" } }}
         >
           <Grid
-            md={10}
+            md={12}
             style={{ width: "100%", marginTop: "0px" }}
             container
             rowSpacing={1}

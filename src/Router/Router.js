@@ -30,6 +30,8 @@ import Login from "../Pages/Login/Login";
 import ViewService from "../Pages/ViewService/ViewService";
 import ManageSchedule from "../Pages/ManageSchedule/ManageSchedule";
 import CurrentService from "../Pages/CurrentService/CurrentService";
+import Manager from "../Pages/Manager/Manager";
+import CreateManager from "../Pages/Manager/CreateManager";
 export default function Index() {
   return (
     <Router>
@@ -66,6 +68,8 @@ export default function Index() {
         <Route path="/updateEmployee/:id" element={<UpdateEmployee />}></Route>
         <Route path="/editAppUser/:id" element={<EditAppUser />}></Route>
         <Route path="/createLeadStatus" element={<CreateLeadStatus />}></Route>
+        <Route path="/manager" element={<Manager />}></Route>
+        <Route path="/createManager" element={<CreateManager />}></Route>
         <Route
           path="/createIndustryType"
           element={<CreateIndustryType />}

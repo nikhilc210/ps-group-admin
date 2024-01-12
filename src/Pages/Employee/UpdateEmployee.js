@@ -96,7 +96,7 @@ export default function UpdateEmployee() {
                     sx={{ flexDirection: { xs: "column", md: "row" } }}
                   >
                     <Grid
-                      md={10}
+                      md={12}
                       container
                       rowSpacing={1}
                       columnSpacing={{ xs: 1, sm: 1, md: 1 }}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   Button,
   Form,
@@ -13,13 +13,14 @@ import { Card, Tag } from "antd";
 import { ToastContainer, toast } from "react-toastify";
 import { Grid, Box } from "@mui/material";
 import moment from "moment";
-import { psApiCalling } from "../API/Index";
+import { psApiCalling } from "../../Component/API/Index";
+
 const { Option } = Select;
 const onFinish = (values) => {
-  console.log(values);
+  console.log();
 
   let params = {
-    action: "CREATE_EMPLOYEE",
+    action: "CREATE_MANAGER",
     employee_name: values.employee_name,
     employee_dob: moment(values.employee_dob.$d).format("DD-MM-YYYY"),
     employee_gender: values.employee_gender,
@@ -32,9 +33,7 @@ const onFinish = (values) => {
     account_number: values.account_number,
     employee_address: values.employee_address,
     phone_number: values.phone_number,
-    employee_role: values.employee_role,
     employee_password: values.employee_password,
-    employee_manager: values.employee_manager,
   };
   psApiCalling(params).then((res) => {
     if (res.status === "success") {
@@ -44,30 +43,10 @@ const onFinish = (values) => {
     }
   });
 };
-
-export default function CreateLeadForm() {
-  const [managerList, setManagerList] = useState([[]]);
+export default function CreateManagerForm() {
   const onChangeDate = (values) => {
     let dob = moment(values.employee_dob).format("DD-MM-YYYY");
   };
-  const getManager = () => {
-    let params = { action: "GET_MANAGER_LIST" };
-    psApiCalling(params).then((res) => {
-      if (Array.isArray(res)) {
-        setManagerList(
-          res.map((item) => {
-            return {
-              label: item.data.full_name,
-              value: item.data.id,
-            };
-          })
-        );
-      }
-    });
-  };
-  useEffect(() => {
-    getManager();
-  }, []);
 
   return (
     <Box>
@@ -87,7 +66,7 @@ export default function CreateLeadForm() {
             style={{ marginTop: "0px" }}
           >
             <Card
-              title="Create Employee"
+              title="Create Manager"
               style={{
                 width: "100%",
                 marginLeft: "1%",
@@ -111,12 +90,12 @@ export default function CreateLeadForm() {
                   }}
                 >
                   <Form.Item
-                    label="Employee Name"
+                    label="Manager Name"
                     name="employee_name"
                     rules={[
                       {
                         required: true,
-                        message: "Employee name is required",
+                        message: "Manager name is required",
                       },
                     ]}
                     style={{
@@ -124,15 +103,15 @@ export default function CreateLeadForm() {
                       width: "calc(50% - 8px)",
                     }}
                   >
-                    <Input placeholder="Employee Name" />
+                    <Input placeholder="Manager Name" />
                   </Form.Item>
                   <Form.Item
-                    label="Employee Dob"
+                    label="Manager Dob"
                     name="employee_dob"
                     rules={[
                       {
                         required: true,
-                        message: "Employee dob is required",
+                        message: "Manager dob is required",
                       },
                     ]}
                     style={{
@@ -153,12 +132,12 @@ export default function CreateLeadForm() {
                   }}
                 >
                   <Form.Item
-                    label="Employee Gender"
+                    label="Manager Gender"
                     name="employee_gender"
                     rules={[
                       {
                         required: true,
-                        message: "Employee gender is required",
+                        message: "Manager gender is required",
                       },
                     ]}
                     style={{
@@ -189,7 +168,7 @@ export default function CreateLeadForm() {
                     />
                   </Form.Item>
                   <Form.Item
-                    label="Employee Email"
+                    label="Manager Email"
                     name="employee_email"
                     rules={[
                       {
@@ -212,83 +191,28 @@ export default function CreateLeadForm() {
                   }}
                 >
                   <Form.Item
-                    label="Employee Role"
-                    name="employee_role"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Employee role is required",
-                      },
-                    ]}
-                    style={{
-                      display: "inline-block",
-                      width: "calc(50% - 8px)",
-                    }}
-                  >
-                    <Select
-                      defaultValue="Select Role"
-                      style={{
-                        width: "100%",
-                      }}
-                      onChange={() => {}}
-                      options={[
-                        {
-                          label: "In-House",
-                          value: "in_house",
-                        },
-                        {
-                          label: "Service Man",
-                          value: "Service Man",
-                        },
-                      ]}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Employee Password"
+                    label="Manager Password"
                     name="employee_password"
                     rules={[
                       {
                         required: true,
-                        message: "Employee password is required",
+                        message: "Manager password is required",
                       },
                     ]}
                     style={{
                       display: "inline-block",
                       width: "calc(50% - 8px)",
-                      margin: "0 8px",
                     }}
                   >
                     <Input.Password placeholder="Email Password" />
                   </Form.Item>
-                </Form.Item>
-                <Form.Item
-                  style={{
-                    marginBottom: 0,
-                  }}
-                >
                   <Form.Item
-                    label="Employee Phone Number"
+                    label="Manager Phone Number"
                     name="phone_number"
                     rules={[
                       {
                         required: true,
-                        message: "Employee Phone is required",
-                      },
-                    ]}
-                    style={{
-                      display: "inline-block",
-                      width: "calc(50% - 8px)",
-                    }}
-                  >
-                    <Input placeholder="Phone Number" />
-                  </Form.Item>
-                  <Form.Item
-                    label="Select Manager"
-                    name="employee_manager"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Manager is required",
+                        message: "Manager Phone is required",
                       },
                     ]}
                     style={{
@@ -297,14 +221,7 @@ export default function CreateLeadForm() {
                       margin: "0 8px",
                     }}
                   >
-                    <Select
-                      defaultValue="Select Manager"
-                      style={{
-                        width: "100%",
-                      }}
-                      onChange={() => {}}
-                      options={managerList}
-                    />
+                    <Input placeholder="Phone Number" />
                   </Form.Item>
                 </Form.Item>
 
@@ -314,12 +231,12 @@ export default function CreateLeadForm() {
                   }}
                 >
                   <Form.Item
-                    label="Employee Type"
+                    label="Manager Type"
                     name="employee_type"
                     rules={[
                       {
                         required: true,
-                        message: "Please select employee type",
+                        message: "Please select manager type",
                       },
                     ]}
                     style={{
@@ -328,7 +245,7 @@ export default function CreateLeadForm() {
                     }}
                   >
                     <Select
-                      defaultValue="Select Employee Type"
+                      defaultValue="Select Manager Type"
                       style={{
                         width: "100%",
                       }}
@@ -346,12 +263,12 @@ export default function CreateLeadForm() {
                     />
                   </Form.Item>
                   <Form.Item
-                    label="Employee AADHAR"
+                    label="Manager AADHAR"
                     name="aadhar"
                     rules={[
                       {
                         required: true,
-                        message: "Employee aadhar is required",
+                        message: "Manager aadhar is required",
                       },
                     ]}
                     style={{
@@ -370,12 +287,12 @@ export default function CreateLeadForm() {
                   }}
                 >
                   <Form.Item
-                    label="Employee PAN"
+                    label="Manager PAN"
                     name="pan_card"
                     rules={[
                       {
                         required: true,
-                        message: "Employee pan is required",
+                        message: "Manager pan is required",
                       },
                     ]}
                     style={{
@@ -416,7 +333,7 @@ export default function CreateLeadForm() {
                     <Input placeholder="Bank IFSC Code" />
                   </Form.Item>
                   <Form.Item
-                    label="Employee Bank Account Number"
+                    label="Manager Bank Account Number"
                     name="account_number"
                     rules={[]}
                     style={{
@@ -435,12 +352,12 @@ export default function CreateLeadForm() {
                   }}
                 >
                   <Form.Item
-                    label="Employee Address"
+                    label="Manager Address"
                     name="employee_address"
                     rules={[
                       {
                         required: true,
-                        message: "Employee Address is required",
+                        message: "Manager Address is required",
                       },
                     ]}
                     style={{
@@ -448,7 +365,7 @@ export default function CreateLeadForm() {
                       width: "calc(100% - 8px)",
                     }}
                   >
-                    <Input placeholder="Employee Address" />
+                    <Input placeholder="Manager Address" />
                   </Form.Item>
                 </Form.Item>
 
@@ -458,7 +375,7 @@ export default function CreateLeadForm() {
                     htmlType="submit"
                     style={{ width: "100%", background: "#3E4095" }}
                   >
-                    Create Employee
+                    Create Manager
                   </Button>
                 </Form.Item>
               </Form>

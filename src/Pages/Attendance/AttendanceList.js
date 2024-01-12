@@ -91,7 +91,7 @@ export default function EmployeeList(props) {
           md={{ flexDirection: { xs: "column", md: "row" } }}
         >
           <Grid
-            md={10}
+            md={12}
             style={{ width: "100%", marginTop: "0px" }}
             container
             rowSpacing={1}

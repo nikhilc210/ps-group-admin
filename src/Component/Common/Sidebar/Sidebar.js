@@ -121,8 +121,8 @@ export default function Sidebar() {
       },
       {
         id: 6,
-        menu: "App Users",
-        link: "/app_users",
+        menu: "Managers",
+        link: "/manager",
         icon: (
           <MdSupervisedUserCircle
             customClassName="nav-icon"
