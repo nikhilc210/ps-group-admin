@@ -5,50 +5,48 @@ import { ToastContainer, toast } from "react-toastify";
 import Table from "../../Component/Table/Table";
 import { psApiCalling } from "../../Component/API/Index";
 
-export default function OrderList() {
+export default function EmployeeTaskList(props) {
   const [data, setData] = useState([]);
   const [col, setCol] = useState([
     {
-      title: "No",
+      title: "ID",
       dataIndex: "id",
       key: "id",
     },
     {
-      title: "Client",
-
-      key: "cname",
-      render: (item, record) => <Tag color="#0be881">{item.cname}</Tag>,
+      title: "Task Date",
+      key: "date",
+      render: (_, record) => <Tag color="blue">{_.date}</Tag>,
     },
-
     {
-      title: "View Details",
+      title: "Task",
+      key: "task",
+      render: (_, record) => <p>{_.task}</p>,
+    },
+    {
+      title: "Action",
       key: "action",
-      render: (item, record) => (
+      render: (_, record) => (
         <>
-          <Button type="primary" href={"/serviceList/" + item.cid}>
-            View Services
-          </Button>
+          {_.status === "Pending" ? (
+            <Button type="primary">Mark as Completed</Button>
+          ) : (
+            <Button type="primary" style={{ background: "green" }}>
+              Completed
+            </Button>
+          )}
         </>
       ),
     },
   ]);
 
   const getLeadList = () => {
-    let params = { action: "GET_ORDER_LIST" };
+    let params = { action: "GET_EMPLOYEE_TASK", code: props.code };
     psApiCalling(params).then((res) => {
       if (Array.isArray(res)) {
-        setData(filterUniqueCid(res));
+        setData(res);
       }
     });
-  };
-
-  const filterUniqueCid = (data) => {
-    const uniqueCidMap = new Map();
-    data.forEach((item) => {
-      uniqueCidMap.set(item.cid, item);
-    });
-
-    return Array.from(uniqueCidMap.values());
   };
 
   useEffect(() => {
@@ -57,10 +55,7 @@ export default function OrderList() {
 
   return (
     <Box>
-      <Box
-        md={{ width: "100%" }}
-        style={{ marginTop: "8px", overflow: "scroll" }}
-      >
+      <Box md={{ width: "100%" }} style={{ marginTop: "8px" }}>
         <Grid
           container
           rowSpacing={1}
@@ -76,20 +71,11 @@ export default function OrderList() {
             style={{ marginTop: "0px" }}
           >
             <Card
-              title="Client's Orders"
-              extra={
-                <Button
-                  href="/createNewOrder"
-                  style={{ background: "#5f27cd", color: "#FFFFFF" }}
-                >
-                  Create New Order
-                </Button>
-              }
+              title={props.name.replace("%20", " ") + " Task"}
               style={{
                 width: "98%",
                 marginLeft: "1%",
                 marginTop: "30px",
-                overflow: "scroll",
               }}
             >
               <Table data={data} col={col} />

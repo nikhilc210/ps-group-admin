@@ -3,11 +3,20 @@ import { Container, Row, Col, Image } from "react-bootstrap";
 import Header from "../../Component/Common/Header/Header";
 import Sidebar from "../../Component/Common/Sidebar/Sidebar";
 import Zoom from "react-medium-image-zoom";
-import { Descriptions, Card, Button, Divider, Form, Select } from "antd";
+import {
+  Descriptions,
+  Card,
+  Button,
+  Divider,
+  Form,
+  Select,
+  DatePicker,
+} from "antd";
 import "./ManageSchedule.css";
 import { ToastContainer, toast } from "react-toastify";
 import { psApiCalling } from "../../Component/API/Index";
-
+import moment from "moment";
+const { RangePicker } = DatePicker;
 export default function ManageSchedule() {
   const [id, setId] = useState(window.location.pathname.split("/")[2]);
   const [oid, setOId] = useState(window.location.pathname.split("/")[3]);
@@ -29,6 +38,12 @@ export default function ManageSchedule() {
   });
   const [completedDetail, setCompletedDetail] = useState({});
   const [images, setImages] = useState([]);
+  const [showDateRange, setShowDateRange] = useState(false);
+
+  const disabledDate = (current) => {
+    // Disable past dates
+    return current && current < moment().startOf("day");
+  };
 
   const getServiceImages = () => {
     let params = { action: "GET_ALL_SCHEDULE_SERVICE_IMAGE", sid: id };
@@ -71,20 +86,38 @@ export default function ManageSchedule() {
   };
 
   const onFinish = (values) => {
-    console.log(values);
-    let params = {
-      action: "UPDATE_SERVICE_MAN",
-      service_man: values.service_man,
-      id: id,
-      oid: oid,
-    };
-    psApiCalling(params).then((res) => {
-      if (res.status === "success") {
-        toast.success(res.message);
-      } else {
-        toast.error(res.message);
-      }
-    });
+    if (values.service_type === "Only this service") {
+      let params = {
+        action: "UPDATE_SERVICE_MAN",
+        service_man: values.service_man,
+        id: id,
+        oid: oid,
+      };
+      psApiCalling(params).then((res) => {
+        if (res.status === "success") {
+          toast.success(res.message);
+        } else {
+          toast.error(res.message);
+        }
+      });
+    } else {
+      console.log(values);
+      let params = {
+        action: "UPDATE_SERVICE_MAN_DATE_RANGE",
+        service_man: values.service_man,
+        id: id,
+        oid: oid,
+        startDate: moment(values.between_date[0].$d).format("YYYY-MM-DD"),
+        endDate: moment(values.between_date[1].$d).format("YYYY-MM-DD"),
+      };
+      psApiCalling(params).then((res) => {
+        if (res.status === "success") {
+          toast.success(res.message);
+        } else {
+          toast.error(res.message);
+        }
+      });
+    }
   };
 
   useEffect(() => {
@@ -216,6 +249,60 @@ export default function ManageSchedule() {
                           options={serviceManList}
                         />
                       </Form.Item>
+                      <Form.Item
+                        label="Service Type"
+                        name="service_type"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Service type is required",
+                          },
+                        ]}
+                        style={{
+                          display: "inline-block",
+                          width: "calc(100%)",
+                          color: "white",
+                        }}
+                        labelCol={"#ffffff"}
+                      >
+                        <Select
+                          className="login-input"
+                          defaultValue="Select Service Type"
+                          style={{
+                            width: "50%",
+                          }}
+                          onChange={(v) => {
+                            if (v === "Date Range") {
+                              setShowDateRange(true);
+                            }
+                          }}
+                          options={[
+                            {
+                              label: "Only this service",
+                              value: "Only this service",
+                            },
+
+                            {
+                              label: "Date Range",
+                              value: "Date Range",
+                            },
+                          ]}
+                        />
+                      </Form.Item>
+                      {showDateRange ? (
+                        <Form.Item
+                          label="From-To Date"
+                          name="between_date"
+                          style={{
+                            display: "inline-block",
+                            width: "calc(100%)",
+                            color: "white",
+                          }}
+                          labelCol={"#ffffff"}
+                        >
+                          <RangePicker disabledDate={disabledDate} />
+                        </Form.Item>
+                      ) : null}
                       <Form.Item label=" " colon={false}>
                         <Button
                           type="primary"

@@ -74,6 +74,7 @@ export default function LeadsCounter() {
     {
       title: "Action",
       key: "action",
+      fixed: "right",
       render: (item, record) => (
         <>
           <Button

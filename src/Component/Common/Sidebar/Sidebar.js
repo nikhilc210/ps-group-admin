@@ -72,6 +72,18 @@ export default function Sidebar() {
         ),
       },
       {
+        id: 14,
+        menu: "Task",
+        link: "/task",
+        icon: (
+          <CgCalendarToday
+            customClassName="nav-icon"
+            style={{ marginRight: "10px" }}
+            color={"#ffffff"}
+          />
+        ),
+      },
+      {
         id: 2,
         menu: "Leads",
         link: "/leads",
@@ -181,6 +193,18 @@ export default function Sidebar() {
       },
       {
         id: 11,
+        menu: "Designation",
+        link: "/designation",
+        icon: (
+          <AiOutlinePullRequest
+            customClassName="nav-icon"
+            style={{ marginRight: "10px" }}
+            color={"#ffffff"}
+          />
+        ),
+      },
+      {
+        id: 12,
         menu: "Lead Status",
         link: "/lead_status",
         icon: (
@@ -192,7 +216,7 @@ export default function Sidebar() {
         ),
       },
       {
-        id: 12,
+        id: 13,
         menu: "Industry Type",
         link: "/industry_type",
         icon: (

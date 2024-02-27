@@ -103,7 +103,7 @@ export default function ScheduleList(props) {
           sx={{ flexDirection: { xs: "column", md: "row" } }}
         >
           <Grid
-            md={10}
+            md={12}
             container
             rowSpacing={1}
             columnSpacing={{ xs: 1, sm: 1, md: 1 }}
@@ -111,7 +111,7 @@ export default function ScheduleList(props) {
             style={{ marginTop: "0px" }}
           >
             <Card
-              title={clientName + " Schedule"}
+              title={clientName.replace("%20", " ") + " Schedule"}
               style={{
                 width: "98%",
                 marginLeft: "1%",

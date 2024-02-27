@@ -15,6 +15,7 @@ import { Grid, Box } from "@mui/material";
 import moment from "moment";
 import { psApiCalling } from "../API/Index";
 const { Option } = Select;
+
 const onFinish = (values) => {
   console.log(values);
 
@@ -34,7 +35,7 @@ const onFinish = (values) => {
     phone_number: values.phone_number,
     employee_role: values.employee_role,
     employee_password: values.employee_password,
-    employee_manager: values.employee_manager,
+    employee_designation: values.employee_designation,
   };
   psApiCalling(params).then((res) => {
     if (res.status === "success") {
@@ -47,6 +48,9 @@ const onFinish = (values) => {
 
 export default function CreateLeadForm() {
   const [managerList, setManagerList] = useState([[]]);
+  const [designation, setDesignation] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [reportingUser, setReportingUser] = useState([]);
   const onChangeDate = (values) => {
     let dob = moment(values.employee_dob).format("DD-MM-YYYY");
   };
@@ -65,8 +69,38 @@ export default function CreateLeadForm() {
       }
     });
   };
+
+  const getDesignation = () => {
+    let params = {
+      action: "GET_DESIGNATION_LIST_REPORTING",
+    };
+    psApiCalling(params).then((res) => {
+      if (Array.isArray(res)) {
+        // setData(res);
+        setDesignation(res);
+      }
+    });
+  };
+
+  const getAllUsers = () => {
+    let params = { action: "GET_USERS_FOR_REPORTING" };
+    psApiCalling(params).then((res) => {
+      if (Array.isArray(res)) {
+        setUsers(res);
+      }
+    });
+  };
+
   useEffect(() => {
     getManager();
+  }, []);
+
+  useEffect(() => {
+    getDesignation();
+  }, []);
+
+  useEffect(() => {
+    getAllUsers();
   }, []);
 
   return (
@@ -283,27 +317,56 @@ export default function CreateLeadForm() {
                     <Input placeholder="Phone Number" />
                   </Form.Item>
                   <Form.Item
-                    label="Select Manager"
-                    name="employee_manager"
+                    label="Select Designation"
+                    name="employee_designation"
                     rules={[
                       {
                         required: true,
-                        message: "Manager is required",
+                        message: "Designation is required",
                       },
                     ]}
                     style={{
                       display: "inline-block",
-                      width: "calc(50% - 8px)",
+                      width: "calc(24% - 8px)",
                       margin: "0 8px",
                     }}
                   >
                     <Select
-                      defaultValue="Select Manager"
+                      defaultValue="Select Designation"
+                      style={{
+                        width: "100%",
+                      }}
+                      onChange={(v, i) => {
+                        let arr = users.filter(
+                          (item) => item.value === i.parent
+                        );
+                        setReportingUser(arr);
+                      }}
+                      options={designation}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label="Reporting To"
+                    name="reporting"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Reporting is required",
+                      },
+                    ]}
+                    style={{
+                      display: "inline-block",
+                      width: "calc(24% - 8px)",
+                      margin: "0 8px",
+                    }}
+                  >
+                    <Select
+                      defaultValue="Select User"
                       style={{
                         width: "100%",
                       }}
                       onChange={() => {}}
-                      options={managerList}
+                      options={reportingUser}
                     />
                   </Form.Item>
                 </Form.Item>

@@ -32,6 +32,11 @@ import ManageSchedule from "../Pages/ManageSchedule/ManageSchedule";
 import CurrentService from "../Pages/CurrentService/CurrentService";
 import Manager from "../Pages/Manager/Manager";
 import CreateManager from "../Pages/Manager/CreateManager";
+import ServiceList from "../Pages/ServiceList/ServiceList";
+import Designation from "../Pages/Designation/Designation";
+import Task from "../Pages/Task/Task";
+import CreateTask from "../Pages/Task/CreateTask";
+import ViewTask from "../Pages/Task/ViewTask";
 export default function Index() {
   return (
     <Router>
@@ -80,6 +85,11 @@ export default function Index() {
           element={<ManageSchedule />}
         ></Route>
         <Route path="/currentService" element={<CurrentService />}></Route>
+        <Route path="/serviceList/:cid" element={<ServiceList />}></Route>
+        <Route path="/designation" element={<Designation />}></Route>
+        <Route path="/task" element={<Task />}></Route>
+        <Route path="/createTask" element={<CreateTask />}></Route>
+        <Route path="/viewTask/:code/:name" element={<ViewTask />}></Route>
       </Routes>
     </Router>
   );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { psApiCalling } from "../API/Index";
+import { psApiCalling } from "../../Component/API/Index";
 import {
   Button,
   Form,
@@ -19,10 +19,10 @@ import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import moment from "moment";
 import DatePickerNew from "react-multi-date-picker";
-import "./CreateNewOrder.css";
+
 const { Option } = Select;
 
-export default function CreateNewOrder() {
+export default function CreateTaskForm() {
   const [value, setValue] = useState(new Date());
   const [clientList, setClientList] = useState([]);
   const [locationList, setLocationList] = useState([]);
@@ -112,52 +112,18 @@ export default function CreateNewOrder() {
     setTime(timeString);
   };
 
-  const getAllClientList = () => {
-    let params = { action: "GET_ALL_LEADS" };
+  const getAllEmployeeList = () => {
+    let params = { action: "GET_EMPLOYEE_LIST" };
     psApiCalling(params).then((res) => {
       if (Array.isArray(res)) {
         setClientList(
           res.map((item) => {
             return {
               value: item.data.id,
-              label: item.data.client_name,
+              label: item.data.full_name,
             };
           })
         );
-      }
-    });
-  };
-
-  const getAllLocation = () => {
-    let params = { action: "GET_ALL_LOCATION" };
-    psApiCalling(params).then((res) => {
-      if (Array.isArray(res)) {
-        setLocationList(res);
-      }
-    });
-  };
-
-  const getServiceList = () => {
-    let params = { action: "GET_SERVICES_TYPE_LIST" };
-    psApiCalling(params).then((res) => {
-      if (Array.isArray(res)) {
-        setIndustryList(
-          res.map((item) => {
-            return {
-              value: item.id,
-              label: item.name,
-            };
-          })
-        );
-      }
-    });
-  };
-
-  const getServiceGuyList = () => {
-    let params = { action: "GET_SERVICE_GUY_LIST" };
-    psApiCalling(params).then((res) => {
-      if (Array.isArray) {
-        setServiceGuyList(res);
       }
     });
   };
@@ -201,20 +167,18 @@ export default function CreateNewOrder() {
       }
 
       let params = {
-        client_name: value.client_name,
-        client_site: value.client_site,
-        service_type: value.service_type,
-        service_date: date,
-        service_time: time,
+        employee_name: value.employee_name,
+        start_date: date,
+        time: time,
         repeat_every: value.repeat_every,
         repetation: value.repetation,
         ends_on: ends_on,
-        service_guy: value.service_guy,
         type: value.type,
         week: week,
         selected_day: selected_day,
         days: day,
-        action: "CREATE_ORDER_FOR_MONTH",
+        task: value.task,
+        action: "CREATE_TASK_FOR_MONTH",
       };
       psApiCalling(params).then((res) => {
         if (res.status === "success") {
@@ -225,18 +189,17 @@ export default function CreateNewOrder() {
       });
     } else {
       let params = {
-        client_name: value.client_name,
-        client_site: value.client_site,
-        service_type: value.service_type,
-        service_date: date,
-        service_time: time,
+        employee_name: value.employee_name,
+        start_date: date,
+        time: time,
         repeat_every: value.repeat_every,
         repetation: value.repetation,
         ends_on: ends_on,
-        service_guy: value.service_guy,
-        action: "CREATE_NEW_ORDER",
+        action: "CREATE_NEW_TASK",
         days: day,
+        task: value.task,
       };
+      console.log("params======>", params);
       psApiCalling(params).then((res) => {
         if (res.status === "success") {
           toast.success(res.message);
@@ -248,18 +211,9 @@ export default function CreateNewOrder() {
   };
 
   useEffect(() => {
-    getAllClientList();
-  }, []);
-  useEffect(() => {
-    getAllLocation();
-  }, []);
-  useEffect(() => {
-    getServiceList();
+    getAllEmployeeList();
   }, []);
 
-  useEffect(() => {
-    getServiceGuyList();
-  }, []);
   return (
     <Box>
       <Box md={{ width: "100%" }} style={{ marginTop: "8px" }}>
@@ -278,7 +232,7 @@ export default function CreateNewOrder() {
             style={{ marginTop: "0px" }}
           >
             <Card
-              title="Create New Order"
+              title="Create New Task"
               style={{
                 width: "100%",
                 marginLeft: "1%",
@@ -302,21 +256,21 @@ export default function CreateNewOrder() {
                   }}
                 >
                   <Form.Item
-                    label="Client Name"
-                    name="client_name"
+                    label="Select Employee"
+                    name="employee_name"
                     rules={[
                       {
                         required: true,
-                        message: "Client name is required",
+                        message: "Employee is required",
                       },
                     ]}
                     style={{
                       display: "inline-block",
-                      width: "calc(50% - 8px)",
+                      width: "calc(100% - 8px)",
                     }}
                   >
                     <Select
-                      defaultValue="Select Client"
+                      defaultValue="Select Employee"
                       style={{
                         width: "100%",
                       }}
@@ -338,30 +292,6 @@ export default function CreateNewOrder() {
                       options={clientList}
                     />
                   </Form.Item>
-                  <Form.Item
-                    label="Client Site"
-                    name="client_site"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Client email is required",
-                      },
-                    ]}
-                    style={{
-                      display: "inline-block",
-                      width: "calc(50% - 8px)",
-                      margin: "0 8px",
-                    }}
-                  >
-                    <Select
-                      defaultValue="Select Client Site"
-                      style={{
-                        width: "100%",
-                      }}
-                      onChange={() => {}}
-                      options={filteredLocation}
-                    />
-                  </Form.Item>
                 </Form.Item>
                 <Form.Item
                   style={{
@@ -369,62 +299,43 @@ export default function CreateNewOrder() {
                   }}
                 >
                   <Form.Item
-                    label="Service Type"
-                    name="service_type"
+                    label="Start Date"
+                    name="start_date"
                     rules={[
                       {
                         required: true,
-                        message: "Please selct service type",
+                        message: "Start date is required",
                       },
                     ]}
                     style={{
                       display: "inline-block",
-                      width: "calc(50% - 8px)",
+                      width: "calc(48%)",
                     }}
                   >
-                    <Select
-                      defaultValue="Select Service Type"
-                      style={{
-                        width: "100%",
-                      }}
-                      onChange={() => {}}
-                      options={industryList}
+                    <DatePicker
+                      onChange={onChangeDate}
+                      style={{ width: "100%" }}
                     />
                   </Form.Item>
-
                   <Form.Item
-                    label="Service Date"
-                    name="service_date"
+                    label="Start Time"
+                    name="start_time"
                     rules={[
                       {
                         required: true,
-                        message: "Service date is required",
+                        message: "Start time is required",
                       },
                     ]}
                     style={{
                       display: "inline-block",
-                      width: "calc(23%)",
-                      margin: "0 8px",
+                      width: "calc(50%)",
+                      marginLeft: "10px",
                     }}
                   >
-                    <DatePicker onChange={onChangeDate} />
-                  </Form.Item>
-                  <Form.Item
-                    label="Service Time"
-                    name="service_time"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Service time is required",
-                      },
-                    ]}
-                    style={{
-                      display: "inline-block",
-                      width: "calc(23%)",
-                      margin: "0 8px",
-                    }}
-                  >
-                    <TimePicker onChange={onChangeTime} />
+                    <TimePicker
+                      onChange={onChangeTime}
+                      style={{ width: "100%" }}
+                    />
                   </Form.Item>
                 </Form.Item>
 
@@ -465,7 +376,7 @@ export default function CreateNewOrder() {
                     }}
                   >
                     <Select
-                      defaultValue="Select Service Repetation"
+                      defaultValue="Select Task Repetation"
                       style={{
                         width: "100%",
                       }}
@@ -813,7 +724,7 @@ export default function CreateNewOrder() {
                         ]}
                         style={{
                           display: "inline-block",
-                          width: "calc(50% - 8px)",
+                          width: "calc(100% - 8px)",
                           margin: "0 8px",
                         }}
                       >
@@ -825,28 +736,28 @@ export default function CreateNewOrder() {
                       </Form.Item>
                     </>
                   ) : null}
+                </Form.Item>
+                <Form.Item
+                  style={{
+                    marginTop: 20,
+                  }}
+                >
                   <Form.Item
-                    label="Service Guy"
-                    name="service_guy"
+                    label="Task for this employee"
+                    name="task"
                     rules={[
                       {
                         required: true,
-                        message: "Service Guy is required",
+                        message: "Task Message",
                       },
                     ]}
                     style={{
                       display: "inline-block",
-                      width: "calc(50% - 8px)",
+                      width: "calc(100% - 8px)",
+                      margin: "0 8px",
                     }}
                   >
-                    <Select
-                      defaultValue="Select Service Guy"
-                      style={{
-                        width: "100%",
-                      }}
-                      onChange={() => {}}
-                      options={serviceGuyList}
-                    />
+                    <Input.TextArea rows={5} />
                   </Form.Item>
                 </Form.Item>
                 {isLoading ? (
@@ -867,7 +778,7 @@ export default function CreateNewOrder() {
                       htmlType="submit"
                       style={{ width: "100%", background: "#3E4095" }}
                     >
-                      Create New Order
+                      Create New Task
                     </Button>
                   </Form.Item>
                 )}
