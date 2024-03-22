@@ -89,6 +89,10 @@ export default function CreateAdminForm() {
                         required: true,
                         message: "Admin email is required",
                       },
+                      {
+                        type: "email",
+                        message: "Email address is not valid",
+                      },
                     ]}
                     style={{
                       display: "inline-block",
@@ -96,7 +100,13 @@ export default function CreateAdminForm() {
                       margin: "0 8px",
                     }}
                   >
-                    <Input placeholder="Email address" />
+                    <Input
+                      placeholder="Email address"
+                      inputMode={"email"}
+                      onInput={(e) =>
+                        (e.target.value = e.target.value.toLowerCase())
+                      }
+                    />
                   </Form.Item>
                 </Form.Item>
                 <Form.Item
@@ -118,7 +128,7 @@ export default function CreateAdminForm() {
                       width: "calc(50% - 8px)",
                     }}
                   >
-                    <Input placeholder="Admin Phone Number" />
+                    <Input placeholder="Admin Phone Number" maxLength={10} />
                   </Form.Item>
                   <Form.Item
                     label="Password"

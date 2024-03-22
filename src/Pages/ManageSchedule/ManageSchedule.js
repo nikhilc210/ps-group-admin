@@ -245,6 +245,13 @@ export default function ManageSchedule() {
                           style={{
                             width: "50%",
                           }}
+                          showSearch
+                          optionFilterProp="children"
+                          filterOption={(input, option) =>
+                            option.label
+                              .toLowerCase()
+                              .indexOf(input.toLowerCase()) >= 0
+                          }
                           onChange={() => {}}
                           options={serviceManList}
                         />

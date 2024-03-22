@@ -278,7 +278,7 @@ export default function CreateNewOrder() {
             style={{ marginTop: "0px" }}
           >
             <Card
-              title="Create New Order"
+              title="Create New Schedule"
               style={{
                 width: "100%",
                 marginLeft: "1%",
@@ -316,7 +316,15 @@ export default function CreateNewOrder() {
                     }}
                   >
                     <Select
+                      showSearch={true}
+                      // filterOption
+                      optionFilterProp="children"
                       defaultValue="Select Client"
+                      filterOption={(input, option) =>
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
                       style={{
                         width: "100%",
                       }}
@@ -355,6 +363,13 @@ export default function CreateNewOrder() {
                   >
                     <Select
                       defaultValue="Select Client Site"
+                      showSearch
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
                       style={{
                         width: "100%",
                       }}
@@ -384,6 +399,13 @@ export default function CreateNewOrder() {
                   >
                     <Select
                       defaultValue="Select Service Type"
+                      showSearch
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
                       style={{
                         width: "100%",
                       }}
@@ -424,7 +446,7 @@ export default function CreateNewOrder() {
                       margin: "0 8px",
                     }}
                   >
-                    <TimePicker onChange={onChangeTime} />
+                    <TimePicker onChange={onChangeTime} format="h:mm a" />
                   </Form.Item>
                 </Form.Item>
 
@@ -844,6 +866,13 @@ export default function CreateNewOrder() {
                       style={{
                         width: "100%",
                       }}
+                      showSearch
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
                       onChange={() => {}}
                       options={serviceGuyList}
                     />

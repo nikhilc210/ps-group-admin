@@ -111,7 +111,7 @@ export default function ScheduleList(props) {
             style={{ marginTop: "0px" }}
           >
             <Card
-              title={clientName.replace("%20", " ") + " Schedule"}
+              title={clientName.replace(/%20/g, " ") + " Schedule"}
               style={{
                 width: "98%",
                 marginLeft: "1%",

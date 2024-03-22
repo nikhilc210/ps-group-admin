@@ -15,22 +15,22 @@ export default function SiteList(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
   const [col, setCol] = useState([
-    {
-      title: "ID",
-      key: "id",
-      render: (item) => <p>{item.data.id}</p>,
-    },
+    // {
+    //   title: "ID",
+    //   key: "id",
+    //   render: (item) => <p>{item.data.id}</p>,
+    // },
     {
       title: "Site Address",
       key: "site_address",
       render: (item) => <p>{item.data.address}</p>,
     },
 
-    {
-      title: "Created Time",
-      key: "created_time",
-      render: (item) => <p>{item.data.created_time}</p>,
-    },
+    // {
+    //   title: "Created Time",
+    //   key: "created_time",
+    //   render: (item) => <p>{item.data.created_time}</p>,
+    // },
 
     {
       title: "Action",
@@ -120,7 +120,7 @@ export default function SiteList(props) {
           sx={{ flexDirection: { xs: "column", md: "row" } }}
         >
           <Grid
-            md={10}
+            md={12}
             container
             rowSpacing={1}
             columnSpacing={{ xs: 1, sm: 1, md: 1 }}
@@ -155,6 +155,7 @@ export default function SiteList(props) {
         open={open}
         width={600}
         footer={null}
+        onCancel={() => setOpen(false)}
       >
         <Divider />
         <div>

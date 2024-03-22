@@ -26,11 +26,11 @@ export default function ContactPersonList(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
   const [col, setCol] = useState([
-    {
-      title: "ID",
-      key: "id",
-      render: (item) => <p>{item.id}</p>,
-    },
+    // {
+    //   title: "ID",
+    //   key: "id",
+    //   render: (item) => <p>{item.id}</p>,
+    // },
     {
       title: "Site Address",
       key: "site_address",
@@ -204,6 +204,7 @@ export default function ContactPersonList(props) {
         open={open}
         width={600}
         footer={null}
+        onCancel={() => setOpen(false)}
       >
         <Divider />
         <div>
@@ -233,6 +234,11 @@ export default function ContactPersonList(props) {
                   width: "100%",
                 }}
                 options={addressList}
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
               />
             </Form.Item>
             <Form.Item
@@ -265,13 +271,22 @@ export default function ContactPersonList(props) {
                     required: true,
                     message: "Contact person email is required",
                   },
+                  {
+                    type: "email",
+                    message: "Email address is not valid",
+                  },
                 ]}
                 style={{
                   display: "inline-block",
                   width: "calc(50% - 8px)",
                 }}
               >
-                <Input placeholder="Email Address" />
+                <Input
+                  placeholder="Email Address"
+                  onInput={(e) =>
+                    (e.target.value = e.target.value.toLowerCase())
+                  }
+                />
               </Form.Item>
               <Form.Item
                 label="Contact Person Phone"
@@ -288,7 +303,7 @@ export default function ContactPersonList(props) {
                   margin: "0 8px",
                 }}
               >
-                <Input placeholder="Phone Number" />
+                <Input placeholder="Phone Number" maxLength={10} />
               </Form.Item>
             </Form.Item>
             <Form.Item label=" " colon={false}>

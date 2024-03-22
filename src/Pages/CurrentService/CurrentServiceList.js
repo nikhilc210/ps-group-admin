@@ -10,11 +10,6 @@ export default function CurrentServiceList(props) {
   const [data, setData] = useState([]);
   const [col, setCol] = useState([
     {
-      title: "No",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
       title: "Service Date",
 
       key: "service_date",

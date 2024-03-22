@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Form,
@@ -18,9 +18,12 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { FileUploader } from "react-drag-drop-files";
 import { SyncLoader } from "react-spinners";
 import { uploadImage } from "../API/Index";
+import { Image } from "react-bootstrap";
 const { Option } = Select;
 
-export default function CreateWebsiteServiceForm() {
+export default function EditWebsiteServiceForm(props) {
+  const { id } = props;
+  const [form] = Form.useForm();
   const fileTypes = ["jpg", "png", "gif"];
   const [isLoading, setIsLoading] = useState(false);
   const [website, setWebsite] = useState(null);
@@ -33,10 +36,11 @@ export default function CreateWebsiteServiceForm() {
       toast.error("Please enter service description");
     } else {
       let params = {
-        action: "CREATE_SERVICE",
+        action: "UPDATE_SERVICE",
         service_name: values.service_name,
         description: description,
         image: website,
+        id: id,
       };
       psApiCalling(params).then((res) => {
         if (res.status === "success") {
@@ -66,6 +70,23 @@ export default function CreateWebsiteServiceForm() {
     }
   };
 
+  const getServiceDetail = () => {
+    let params = { action: "GET_WEBSITE_SERVICE_DETAILS", id: id };
+    psApiCalling(params).then((res) => {
+      if (res.status === "success") {
+        form.setFieldsValue({
+          service_name: res.name,
+        });
+        setDescription(res.desc);
+        setWebsite(res.image);
+      }
+    });
+  };
+
+  useEffect(() => {
+    getServiceDetail();
+  }, []);
+
   return (
     <Box>
       <Box md={{ width: "100%" }} style={{ marginTop: "8px" }}>
@@ -84,7 +105,7 @@ export default function CreateWebsiteServiceForm() {
             style={{ marginTop: "0px" }}
           >
             <Card
-              title="Create Website Service"
+              title="Edit Website Service"
               style={{
                 width: "100%",
                 marginLeft: "1%",
@@ -92,6 +113,7 @@ export default function CreateWebsiteServiceForm() {
               }}
             >
               <Form
+                form={form}
                 name="complex-form"
                 layout="vertical"
                 onFinish={onFinish}
@@ -134,6 +156,7 @@ export default function CreateWebsiteServiceForm() {
                 >
                   <CKEditor
                     editor={ClassicEditor}
+                    data={description}
                     onChange={(event, editor) => {
                       setDescription(editor.getData());
                     }}
@@ -153,6 +176,10 @@ export default function CreateWebsiteServiceForm() {
                     width: "calc(100% - 0px)",
                   }}
                 >
+                  <Image
+                    src={website}
+                    style={{ width: "100px", height: "100px" }}
+                  />
                   <FileUploader
                     handleChange={(file) => {
                       uploadImageToServer(file, "website");
@@ -188,7 +215,7 @@ export default function CreateWebsiteServiceForm() {
                       htmlType="submit"
                       style={{ width: "100%", background: "#3E4095" }}
                     >
-                      Create Website Service
+                      Update Website Service
                     </Button>
                   )}
                 </Form.Item>

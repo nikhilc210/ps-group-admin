@@ -35,12 +35,12 @@ export default function EmployeeList() {
     });
   };
   const [col, setCol] = useState([
-    {
-      title: "ID",
+    // {
+    //   title: "ID",
 
-      key: "id",
-      render: (_, record) => <>{_.data.id}</>,
-    },
+    //   key: "id",
+    //   render: (_, record) => <>{_.data.id}</>,
+    // },
     {
       title: "Employee Code",
       key: "code",
@@ -109,6 +109,7 @@ export default function EmployeeList() {
       title: "Action",
       key: "action",
       fixed: "right",
+
       render: (_, record) => (
         <div style={{ display: "inline-block" }}>
           <Button
@@ -135,10 +136,35 @@ export default function EmployeeList() {
               Change Password
             </Button>
           ) : null}
+          {_.data.isActive === "1" ? (
+            <Button
+              danger
+              type="primary"
+              onClick={() => employeAction("Block", _.data.id)}
+            >
+              Block
+            </Button>
+          ) : (
+            <Button
+              type="primary"
+              onClick={() => employeAction("Unblock", _.data.id)}
+            >
+              Unblock
+            </Button>
+          )}
         </div>
       ),
     },
   ]);
+
+  const employeAction = (type, id) => {
+    let params = { action: "EMPLOYEE_ACTION", type: type, id: id };
+    psApiCalling(params).then((res) => {
+      if (res.status === "success") {
+        getEmployeList();
+      }
+    });
+  };
 
   const getEmployeList = () => {
     let params = { action: "GET_EMPLOYEE_LIST" };

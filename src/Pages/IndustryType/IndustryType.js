@@ -9,7 +9,7 @@ export default function IndustryType() {
     <Container fluid className={"mainContainer"}>
       <Row>
         <Col md={2} style={{ padding: "0px", margin: "0px" }}>
-          <Sidebar />
+          <Sidebar to={window.location.pathname} />
         </Col>
         <Col md={10}>
           <Header />

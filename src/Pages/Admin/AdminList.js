@@ -8,11 +8,11 @@ import { psApiCalling } from "../../Component/API/Index";
 export default function AdminList() {
   const [data, setData] = useState([]);
   const [col, setCol] = useState([
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
+    // {
+    //   title: "ID",
+    //   dataIndex: "id",
+    //   key: "id",
+    // },
     {
       title: "Fullname",
       dataIndex: "fullname",
@@ -27,6 +27,7 @@ export default function AdminList() {
       title: "Email Address",
       key: "emailAddress",
       render: (_, record) => <Tag color={"green"}>{_.emailAddress}</Tag>,
+      width: "180px",
     },
     {
       title: "Admin Type",
@@ -42,14 +43,52 @@ export default function AdminList() {
     {
       title: "Status",
       key: "status",
-      render: (_, record) => <></>,
+      render: (_, record) => (
+        <>
+          <>{_.is_active === "1" ? <p>Active</p> : <p>Deactivated</p>}</>
+        </>
+      ),
     },
     {
       title: "Action",
       key: "action",
-      render: (_, record) => <></>,
+      render: (_, record) => (
+        <>
+          {_.is_active === "1" ? (
+            <>
+              <Button
+                danger={true}
+                onClick={() => adminAction(_.id, "Inactive")}
+              >
+                Make Inactive
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                type="primary"
+                onClick={() => adminAction(_.id, "Active")}
+              >
+                Make Active
+              </Button>
+            </>
+          )}
+        </>
+      ),
     },
   ]);
+
+  const adminAction = (id, type) => {
+    let params = { action: "ADMIN_ACTION", id: id, type: type };
+    psApiCalling(params).then((res) => {
+      if (res.status === "success") {
+        toast.success(res.message);
+        getAdminList();
+      } else {
+        toast.error(res.message);
+      }
+    });
+  };
 
   const getAdminList = () => {
     let params = { action: "GET_ADMIN_LIST" };

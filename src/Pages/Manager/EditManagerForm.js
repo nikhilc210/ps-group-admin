@@ -13,106 +13,77 @@ import { Card, Tag } from "antd";
 import { ToastContainer, toast } from "react-toastify";
 import { Grid, Box } from "@mui/material";
 import moment from "moment";
-import { psApiCalling } from "../API/Index";
+import { psApiCalling } from "../../Component/API/Index";
+
 const { Option } = Select;
 
-const onFinish = (values) => {
-  console.log(values);
+export default function EditManagerForm() {
+  const [form] = Form.useForm();
+  const [mid, setMid] = useState(window.location.pathname.split("/")[2]);
 
-  let params = {
-    action: "CREATE_EMPLOYEE",
-    employee_name: values.employee_name,
-    employee_dob: moment(values.employee_dob.$d).format("DD-MM-YYYY"),
-    employee_gender: values.employee_gender,
-    employee_email: values.employee_email,
-    employee_type: values.employee_type,
-    aadhar: values.aadhar,
-    pan_card: values.pan_card,
-    bank_name: values.bank_name,
-    ifsc: values.ifsc,
-    account_number: values.account_number,
-    employee_address: values.employee_address,
-    phone_number: values.phone_number,
-    employee_role: values.employee_role,
-    employee_password: values.employee_password,
-    employee_designation: values.employee_designation,
-    reporting: values.reporting,
-  };
-  psApiCalling(params).then((res) => {
-    if (res.status === "success") {
-      toast.success(res.message);
-    } else {
-      toast.error(res.message);
-    }
-  });
-};
-
-export default function CreateLeadForm() {
-  const [managerList, setManagerList] = useState([[]]);
-  const [designation, setDesignation] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [reportingUser, setReportingUser] = useState([]);
-  const [allUsers, setAllUsers] = useState([]);
-  const onChangeDate = (values) => {
-    let dob = moment(values.employee_dob).format("DD-MM-YYYY");
-  };
   const getManager = () => {
-    let params = { action: "GET_MANAGER_LIST" };
+    let params = { action: "GET_EMPLOYEE_DETAILS", eid: mid };
     psApiCalling(params).then((res) => {
-      if (Array.isArray(res)) {
-        setManagerList(
-          res.map((item) => {
-            return {
-              label: item.data.full_name,
-              value: item.data.id,
-            };
-          })
-        );
+      if (res.status === "success") {
+        console.log(res);
+        form.setFieldsValue({
+          employee_name: res.data.full_name,
+          employee_dob: moment(res.data.user_dob, "DD-MM-YYYY"),
+          employee_gender: res.data.user_gender,
+          employee_email: res.data.user_email,
+          employee_role: res.data.employe_role,
+          employee_password: res.data.password,
+          phone_number: res.data.phone_number,
+          employee_designation: res.data.employee_designation,
+          reporting: res.data.reporting_to,
+          employee_type: res.data.user_type,
+          aadhar: res.data.aadhar,
+          pan_card: res.data.pan_card,
+          bank_name: res.data.bank_name,
+          ifsc: res.data.ifsc,
+          account_number: res.data.account_number,
+          employee_address: res.data.user_address,
+        });
       }
     });
   };
 
-  const getDesignation = () => {
+  const onFinish = (values) => {
+    console.log();
+
     let params = {
-      action: "GET_DESIGNATION_LIST_REPORTING",
+      action: "UPDATE_MANAGER",
+      employee_name: values.employee_name,
+      employee_dob: moment(values.employee_dob.$d).format("DD-MM-YYYY"),
+      employee_gender: values.employee_gender,
+      employee_email: values.employee_email,
+      employee_type: values.employee_type,
+      aadhar: values.aadhar,
+      pan_card: values.pan_card,
+      bank_name: values.bank_name,
+      ifsc: values.ifsc,
+      account_number: values.account_number,
+      employee_address: values.employee_address,
+      phone_number: values.phone_number,
+      employee_password: values.employee_password,
+      mid: mid,
     };
     psApiCalling(params).then((res) => {
-      if (Array.isArray(res)) {
-        // setData(res);
-        setDesignation(res);
-      }
-    });
-  };
-
-  const getAllUsers = () => {
-    let params = { action: "GET_USERS_FOR_REPORTING" };
-    psApiCalling(params).then((res) => {
-      console.log(res);
-      if (Array.isArray(res)) {
-        setAllUsers(res);
-        setUsers(
-          res.map((item) => {
-            return {
-              label: item.label,
-              value: item.value,
-            };
-          })
-        );
+      if (res.status === "success") {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
       }
     });
   };
 
   useEffect(() => {
     getManager();
-  }, []);
+  }, [mid]);
 
-  useEffect(() => {
-    getDesignation();
-  }, []);
-
-  useEffect(() => {
-    getAllUsers();
-  }, []);
+  const onChangeDate = (values) => {
+    let dob = moment(values.employee_dob).format("DD-MM-YYYY");
+  };
 
   return (
     <Box>
@@ -132,7 +103,7 @@ export default function CreateLeadForm() {
             style={{ marginTop: "0px" }}
           >
             <Card
-              title="Create Employee"
+              title="Edit Manager"
               style={{
                 width: "100%",
                 marginLeft: "1%",
@@ -140,6 +111,7 @@ export default function CreateLeadForm() {
               }}
             >
               <Form
+                form={form}
                 name="complex-form"
                 layout="vertical"
                 onFinish={onFinish}
@@ -156,12 +128,12 @@ export default function CreateLeadForm() {
                   }}
                 >
                   <Form.Item
-                    label="Employee Name"
+                    label="Manager Name"
                     name="employee_name"
                     rules={[
                       {
                         required: true,
-                        message: "Employee name is required",
+                        message: "Manager name is required",
                       },
                     ]}
                     style={{
@@ -169,15 +141,15 @@ export default function CreateLeadForm() {
                       width: "calc(50% - 8px)",
                     }}
                   >
-                    <Input placeholder="Employee Name" />
+                    <Input placeholder="Manager Name" />
                   </Form.Item>
                   <Form.Item
-                    label="Employee Dob"
+                    label="Manager Dob"
                     name="employee_dob"
                     rules={[
                       {
                         required: true,
-                        message: "Employee dob is required",
+                        message: "Manager dob is required",
                       },
                     ]}
                     style={{
@@ -198,12 +170,12 @@ export default function CreateLeadForm() {
                   }}
                 >
                   <Form.Item
-                    label="Employee Gender"
+                    label="Manager Gender"
                     name="employee_gender"
                     rules={[
                       {
                         required: true,
-                        message: "Employee gender is required",
+                        message: "Manager gender is required",
                       },
                     ]}
                     style={{
@@ -234,13 +206,9 @@ export default function CreateLeadForm() {
                     />
                   </Form.Item>
                   <Form.Item
-                    label="Employee Email"
+                    label="Manager Email"
                     name="employee_email"
                     rules={[
-                      {
-                        type: "email",
-                        message: "Email address is not valid",
-                      },
                       {
                         required: true,
                         message: "Email address is required",
@@ -253,9 +221,7 @@ export default function CreateLeadForm() {
                     }}
                   >
                     <Input
-                      type={"email"}
                       placeholder="Email Address"
-                      inputMode={"email"}
                       onInput={(e) =>
                         (e.target.value = e.target.value.toLowerCase())
                       }
@@ -268,151 +234,37 @@ export default function CreateLeadForm() {
                   }}
                 >
                   <Form.Item
-                    label="Employee Role"
-                    name="employee_role"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Employee role is required",
-                      },
-                    ]}
-                    style={{
-                      display: "inline-block",
-                      width: "calc(50% - 8px)",
-                    }}
-                  >
-                    <Select
-                      defaultValue="Select Role"
-                      style={{
-                        width: "100%",
-                      }}
-                      onChange={() => {}}
-                      options={[
-                        {
-                          label: "In-House",
-                          value: "in_house",
-                        },
-                        {
-                          label: "Service Man",
-                          value: "Service Man",
-                        },
-                      ]}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Employee Password"
+                    label="Manager Password"
                     name="employee_password"
                     rules={[
                       {
                         required: true,
-                        message: "Employee password is required",
+                        message: "Manager password is required",
                       },
                     ]}
                     style={{
                       display: "inline-block",
                       width: "calc(50% - 8px)",
-                      margin: "0 8px",
                     }}
                   >
                     <Input.Password placeholder="Email Password" />
                   </Form.Item>
-                </Form.Item>
-                <Form.Item
-                  style={{
-                    marginBottom: 0,
-                  }}
-                >
                   <Form.Item
-                    label="Employee Phone Number"
+                    label="Manager Phone Number"
                     name="phone_number"
                     rules={[
                       {
                         required: true,
-                        message: "Employee Phone is required",
+                        message: "Manager Phone is required",
                       },
                     ]}
                     style={{
                       display: "inline-block",
                       width: "calc(50% - 8px)",
+                      margin: "0 8px",
                     }}
                   >
                     <Input placeholder="Phone Number" maxLength={10} />
-                  </Form.Item>
-                  <Form.Item
-                    label="Select Designation"
-                    name="employee_designation"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Designation is required",
-                      },
-                    ]}
-                    style={{
-                      display: "inline-block",
-                      width: "calc(24% - 8px)",
-                      margin: "0 8px",
-                    }}
-                  >
-                    <Select
-                      showSearch
-                      optionFilterProp="children"
-                      filterOption={(input, option) =>
-                        option.label
-                          .toLowerCase()
-                          .indexOf(input.toLowerCase()) >= 0
-                      }
-                      defaultValue="Select Designation"
-                      style={{
-                        width: "100%",
-                      }}
-                      onChange={(v, i) => {
-                        let arr = allUsers.filter(
-                          (item) => item.value === i.parent
-                        );
-                        console.log("arr", arr);
-                        //  console.log("users===>", users);
-                        setReportingUser(
-                          arr.map((item) => {
-                            return {
-                              label: item.label,
-                              value: item.id,
-                            };
-                          })
-                        );
-                      }}
-                      options={designation}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Reporting To"
-                    name="reporting"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Reporting is required",
-                      },
-                    ]}
-                    style={{
-                      display: "inline-block",
-                      width: "calc(24% - 8px)",
-                      margin: "0 8px",
-                    }}
-                  >
-                    <Select
-                      showSearch
-                      optionFilterProp="children"
-                      filterOption={(input, option) =>
-                        option.label
-                          .toLowerCase()
-                          .indexOf(input.toLowerCase()) >= 0
-                      }
-                      defaultValue="Select User"
-                      style={{
-                        width: "100%",
-                      }}
-                      onChange={() => {}}
-                      options={reportingUser}
-                    />
                   </Form.Item>
                 </Form.Item>
 
@@ -422,12 +274,12 @@ export default function CreateLeadForm() {
                   }}
                 >
                   <Form.Item
-                    label="Employee Type"
+                    label="Manager Type"
                     name="employee_type"
                     rules={[
                       {
                         required: true,
-                        message: "Please select employee type",
+                        message: "Please select manager type",
                       },
                     ]}
                     style={{
@@ -436,7 +288,7 @@ export default function CreateLeadForm() {
                     }}
                   >
                     <Select
-                      defaultValue="Select Employee Type"
+                      defaultValue="Select Manager Type"
                       style={{
                         width: "100%",
                       }}
@@ -454,12 +306,12 @@ export default function CreateLeadForm() {
                     />
                   </Form.Item>
                   <Form.Item
-                    label="Employee AADHAR"
+                    label="Manager AADHAR"
                     name="aadhar"
                     rules={[
                       {
                         required: true,
-                        message: "Employee aadhar is required",
+                        message: "Manager aadhar is required",
                       },
                     ]}
                     style={{
@@ -478,12 +330,12 @@ export default function CreateLeadForm() {
                   }}
                 >
                   <Form.Item
-                    label="Employee PAN"
+                    label="Manager PAN"
                     name="pan_card"
                     rules={[
                       {
                         required: true,
-                        message: "Employee pan is required",
+                        message: "Manager pan is required",
                       },
                     ]}
                     style={{
@@ -524,7 +376,7 @@ export default function CreateLeadForm() {
                     <Input placeholder="Bank IFSC Code" />
                   </Form.Item>
                   <Form.Item
-                    label="Employee Bank Account Number"
+                    label="Manager Bank Account Number"
                     name="account_number"
                     rules={[]}
                     style={{
@@ -543,12 +395,12 @@ export default function CreateLeadForm() {
                   }}
                 >
                   <Form.Item
-                    label="Employee Address"
+                    label="Manager Address"
                     name="employee_address"
                     rules={[
                       {
                         required: true,
-                        message: "Employee Address is required",
+                        message: "Manager Address is required",
                       },
                     ]}
                     style={{
@@ -556,7 +408,7 @@ export default function CreateLeadForm() {
                       width: "calc(100% - 8px)",
                     }}
                   >
-                    <Input placeholder="Employee Address" />
+                    <Input placeholder="Manager Address" />
                   </Form.Item>
                 </Form.Item>
 
@@ -566,7 +418,7 @@ export default function CreateLeadForm() {
                     htmlType="submit"
                     style={{ width: "100%", background: "#3E4095" }}
                   >
-                    Create Employee
+                    Update Manager
                   </Button>
                 </Form.Item>
               </Form>

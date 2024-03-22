@@ -181,6 +181,10 @@ export default function EditList() {
                                   required: true,
                                   message: "Client email is required",
                                 },
+                                {
+                                  type: "email",
+                                  message: "Email address is not valid",
+                                },
                               ]}
                               style={{
                                 display: "inline-block",
@@ -188,7 +192,13 @@ export default function EditList() {
                                 margin: "0 8px",
                               }}
                             >
-                              <Input placeholder="Email address" />
+                              <Input
+                                placeholder="Email address"
+                                onInput={(e) =>
+                                  (e.target.value =
+                                    e.target.value.toLowerCase())
+                                }
+                              />
                             </Form.Item>
                           </Form.Item>
                           <Form.Item
@@ -210,7 +220,10 @@ export default function EditList() {
                                 width: "calc(50% - 8px)",
                               }}
                             >
-                              <Input placeholder="Client Phone Number" />
+                              <Input
+                                placeholder="Client Phone Number"
+                                maxLength={10}
+                              />
                             </Form.Item>
                             <Form.Item
                               label="Client GST"

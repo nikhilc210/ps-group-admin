@@ -9,76 +9,60 @@ export default function ManagerList() {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   const [col, setCol] = useState([
-    {
-      title: "ID",
+    // {
+    //   title: "ID",
 
-      key: "id",
-      render: (_, record) => <>{_.data.id}</>,
-    },
+    //   key: "id",
+    //   render: (_, record) => <>{_.data.id}</>,
+    //   width: "50px",
+    // },
     {
       title: "User Code",
       key: "code",
       render: (_, record) => <Tag color={"purple"}>{_.data.user_code}</Tag>,
+      width: "130px",
     },
     {
       title: "Fullname",
       key: "fullname",
       render: (_, record) => <>{_.data.full_name}</>,
+      width: "130px",
     },
     {
       title: "Email Address",
       key: "emailAddress",
       render: (_, record) => <Tag color={"#fad390"}>{_.data.user_email}</Tag>,
+      width: "180px",
     },
     {
       title: "Phone Number",
       key: "phone",
       render: (_, record) => <Tag color={"#1e3799"}>{_.data.phone_number}</Tag>,
+      width: "150px",
     },
     {
-      title: "Employee DOB",
+      title: "DOB",
       key: "dob",
       render: (_, record) => <Tag color={"#fa983a"}>{_.data.user_dob}</Tag>,
+      width: "120px",
     },
     {
-      title: "User Gender",
+      title: "Gender",
       key: "gender",
       render: (_, record) => <Tag color={"#4a69bd"}>{_.data.user_gender}</Tag>,
+      width: "110px",
     },
     {
       title: "Employee Type",
       key: "type",
       render: (_, record) => <Tag color={"#e58e26"}>{_.data.user_type}</Tag>,
+      width: "180px",
     },
     {
       title: "Created Time",
       key: "created_time",
       render: (_, record) => <Tag color={"#b71540"}>{_.data.created_time}</Tag>,
-    },
-    {
-      title: "Location",
-      key: "location",
-      render: (_, record) => (
-        <>
-          <Button type="primary">View Location</Button>
-        </>
-      ),
-    },
-    {
-      title: "Attendance",
-      key: "attendance",
-      render: (_, record) => (
-        <>
-          <Button
-            type="primary"
-            onClick={() => {
-              navigate("/view_attendance/" + _.data.id);
-            }}
-          >
-            View Attendance
-          </Button>
-        </>
-      ),
+      width: "150px",
     },
 
     {
@@ -88,15 +72,26 @@ export default function ManagerList() {
         <>
           {_.data.isActive === "1" ? (
             <>
-              <Button danger={true}>Make Inactive</Button>
+              <Button
+                danger={true}
+                onClick={() => managerAction(_.data.id, "Inactive")}
+              >
+                Make Inactive
+              </Button>
             </>
           ) : (
             <>
-              <Button type="primary">Make Active</Button>
+              <Button
+                type="primary"
+                onClick={() => managerAction(_.data.id, "Active")}
+              >
+                Make Active
+              </Button>
             </>
           )}
         </>
       ),
+      width: "150px",
     },
     {
       title: "Action",
@@ -106,14 +101,27 @@ export default function ManagerList() {
           <Button
             style={{ background: "#f9ca24" }}
             type="primary"
-            href={"/editAppUser/" + _.data.id}
+            href={"/editManager/" + _.data.id}
           >
             Edit
           </Button>
         </>
       ),
+      width: "150px",
     },
   ]);
+
+  const managerAction = (id, type) => {
+    let params = { action: "MANAGER_ACTION", id: id, type: type };
+    psApiCalling(params).then((res) => {
+      if (res.status === "success") {
+        toast.success(res.message);
+        getAppUserList();
+      } else {
+        toast.error(res.message);
+      }
+    });
+  };
 
   const getAppUserList = () => {
     let params = { action: "GET_MANAGER_LIST" };

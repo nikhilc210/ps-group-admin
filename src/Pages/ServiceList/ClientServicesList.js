@@ -15,37 +15,45 @@ export default function ClientServicesList() {
       title: "No",
       dataIndex: "id",
       key: "id",
+      width: "auto",
+      width: "80px",
     },
     {
       title: "Client",
 
       key: "cname",
       render: (item, record) => <Tag color="#0be881">{item.cname}</Tag>,
+      width: "200px",
     },
     {
       title: "Service Type",
       render: (item, record) => <Tag color="#3c40c6">{item.service_type}</Tag>,
       key: "service_type",
+      width: "200px",
     },
     {
       title: "Start Date",
       render: (item, record) => <Tag color="#00d8d6">{item.start_date}</Tag>,
       key: "start_date",
+      width: "auto",
     },
     {
       title: "End Date",
       render: (item, record) => <Tag color="#ef5777">{item.end_date}</Tag>,
       key: "end_date",
+      width: "auto",
     },
     {
       title: "No of Service",
       render: (item, record) => <Tag color="#ffdd59">{item.no_service}</Tag>,
       key: "no_service",
+      width: "auto",
     },
     {
       title: "Employee",
       render: (item, record) => <Tag color="#3c40c6">{item.service_guy}</Tag>,
       key: "service_guy",
+      width: "auto",
     },
     {
       title: "Status",
@@ -59,6 +67,7 @@ export default function ClientServicesList() {
         </>
       ),
       key: "status",
+      width: "auto",
     },
     {
       title: "View Details",

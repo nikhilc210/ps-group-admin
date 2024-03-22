@@ -8,11 +8,11 @@ import { psApiCalling } from "../../Component/API/Index";
 export default function LeadList() {
   const [data, setData] = useState([]);
   const [col, setCol] = useState([
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
+    // {
+    //   title: "ID",
+    //   dataIndex: "id",
+    //   key: "id",
+    // },
     {
       title: "Employee Name",
 

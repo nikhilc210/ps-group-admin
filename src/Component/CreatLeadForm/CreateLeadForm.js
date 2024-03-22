@@ -27,6 +27,7 @@ export default function CreateLeadForm() {
       status: values.status,
       site_name: values.site_name,
       client_id: client_id,
+      site_type: values.site_type,
       action: "CREATE_LEAD",
     };
     psApiCalling(params).then((res) => {
@@ -62,8 +63,8 @@ export default function CreateLeadForm() {
         setIndustryList(
           res.map((item) => {
             return {
-              id: item.id,
-              value: item.type,
+              value: item.id,
+              label: item.type,
             };
           })
         );
@@ -144,6 +145,10 @@ export default function CreateLeadForm() {
                         required: true,
                         message: "Client email is required",
                       },
+                      {
+                        type: "email",
+                        message: "Email address is not valid",
+                      },
                     ]}
                     style={{
                       display: "inline-block",
@@ -151,7 +156,13 @@ export default function CreateLeadForm() {
                       margin: "0 8px",
                     }}
                   >
-                    <Input placeholder="Email address" />
+                    <Input
+                      placeholder="Email address"
+                      inputMode={"email"}
+                      onInput={(e) =>
+                        (e.target.value = e.target.value.toLowerCase())
+                      }
+                    />
                   </Form.Item>
                 </Form.Item>
                 <Form.Item
@@ -173,7 +184,7 @@ export default function CreateLeadForm() {
                       width: "calc(50% - 8px)",
                     }}
                   >
-                    <Input placeholder="Client Phone Number" />
+                    <Input placeholder="Client Phone Number" maxLength={10} />
                   </Form.Item>
                   <Form.Item
                     label="Client GST"
@@ -212,6 +223,13 @@ export default function CreateLeadForm() {
                       style={{
                         width: "100%",
                       }}
+                      showSearch
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
                       onChange={() => {}}
                       options={industryList}
                     />
@@ -258,10 +276,43 @@ export default function CreateLeadForm() {
                     ]}
                     style={{
                       display: "inline-block",
-                      width: "calc(100% - 8px)",
+                      width: "calc(50% - 8px)",
                     }}
                   >
                     <Input placeholder="Site Name" />
+                  </Form.Item>
+                  <Form.Item
+                    label="Site Type"
+                    name="site_type"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Site type is required",
+                      },
+                    ]}
+                    style={{
+                      display: "inline-block",
+                      width: "calc(50% - 8px)",
+                      marginLeft: "10px",
+                    }}
+                  >
+                    <Select
+                      defaultValue="Select Type"
+                      style={{
+                        width: "100%",
+                      }}
+                      onChange={() => {}}
+                      options={[
+                        {
+                          label: "Commercial",
+                          value: "Commercial",
+                        },
+                        {
+                          label: "Residential",
+                          value: "Residential",
+                        },
+                      ]}
+                    />
                   </Form.Item>
                 </Form.Item>
                 {isLoading ? (

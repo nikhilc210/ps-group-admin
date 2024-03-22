@@ -24,19 +24,9 @@ export default function EmployeeTaskList(props) {
       render: (_, record) => <p>{_.task}</p>,
     },
     {
-      title: "Action",
+      title: "Status",
       key: "action",
-      render: (_, record) => (
-        <>
-          {_.status === "Pending" ? (
-            <Button type="primary">Mark as Completed</Button>
-          ) : (
-            <Button type="primary" style={{ background: "green" }}>
-              Completed
-            </Button>
-          )}
-        </>
-      ),
+      render: (_, record) => <>-</>,
     },
   ]);
 

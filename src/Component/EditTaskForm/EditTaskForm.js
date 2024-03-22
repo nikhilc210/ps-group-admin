@@ -22,7 +22,9 @@ import DatePickerNew from "react-multi-date-picker";
 
 const { Option } = Select;
 
-export default function CreateTaskForm() {
+export default function CreateTaskForm(props) {
+  const { code, id } = props;
+  const [form] = Form.useForm();
   const [value, setValue] = useState(new Date());
   const [priority, setPriority] = useState([
     {
@@ -143,92 +145,126 @@ export default function CreateTaskForm() {
   };
 
   const onFinish = (value) => {
-    let day = [];
-    let ends_on;
-    if (value.ends_on === undefined) {
-      ends_on = "1";
-    } else {
-      ends_on = value.ends_on;
-    }
-    if (value.repetation === "Weekly") {
-      days.map((item) => {
-        if (item.checked === true) {
-          day.push(item.id);
-        }
-      });
-    } else {
-    }
-    if (value.repetation === "Monthly") {
-      let day = [];
-      let week;
-      let selected_day;
-
-      if (value.week === undefined) {
-        week = "";
-      } else {
-        week = value.week;
-      }
-
-      days.map((item) => {
-        if (item.checked === true) {
-          day.push(item.id);
-        }
-      });
-      if (value.selected_day === undefined) {
-        selected_day = "";
-      } else {
-        selected_day = value.selected_day;
-      }
-
-      let params = {
-        employee_name: value.employee_name,
-        start_date: date,
-        time: time,
-        repeat_every: value.repeat_every,
-        repetation: value.repetation,
-        ends_on: ends_on,
-        type: value.type,
-        week: week,
-        selected_day: selected_day,
-        days: day,
-        task: value.task,
-        task_header: value.task_header,
-        created_by: value.created_by,
-        priority: value.priority,
-        action: "CREATE_TASK_FOR_MONTH",
-      };
-      psApiCalling(params).then((res) => {
-        if (res.status === "success") {
-          toast.success(res.message);
-        } else {
-          toast.error(res.message);
-        }
-      });
-    } else {
-      let params = {
-        employee_name: value.employee_name,
-        start_date: date,
-        time: time,
-        repeat_every: value.repeat_every,
-        repetation: value.repetation,
-        ends_on: ends_on,
-        action: "CREATE_NEW_TASK",
-        days: day,
-        task_header: value.task_header,
-        created_by: value.created_by,
-        priority: value.priority,
-        task: value.task,
-      };
-      console.log("params======>", params);
-      psApiCalling(params).then((res) => {
-        if (res.status === "success") {
-          toast.success(res.message);
-        } else {
-          toast.error(res.message);
-        }
-      });
-    }
+    // let day = [];
+    // let ends_on;
+    // if (value.ends_on === undefined) {
+    //   ends_on = "1";
+    // } else {
+    //   ends_on = value.ends_on;
+    // }
+    // if (value.repetation === "Weekly") {
+    //   days.map((item) => {
+    //     if (item.checked === true) {
+    //       day.push(item.id);
+    //     }
+    //   });
+    // } else {
+    // }
+    // if (value.repetation === "Monthly") {
+    //   let day = [];
+    //   let week;
+    //   let selected_day;
+    //   if (value.week === undefined) {
+    //     week = "";
+    //   } else {
+    //     week = value.week;
+    //   }
+    //   days.map((item) => {
+    //     if (item.checked === true) {
+    //       day.push(item.id);
+    //     }
+    //   });
+    //   if (value.selected_day === undefined) {
+    //     selected_day = "";
+    //   } else {
+    //     selected_day = value.selected_day;
+    //   }
+    //   let params = {
+    //     employee_name: value.employee_name,
+    //     start_date: date,
+    //     time: time,
+    //     repeat_every: value.repeat_every,
+    //     repetation: value.repetation,
+    //     ends_on: ends_on,
+    //     type: value.type,
+    //     week: week,
+    //     selected_day: selected_day,
+    //     days: day,
+    //     task: value.task,
+    //     task_header: value.task_header,
+    //     created_by: value.created_by,
+    //     priority: value.priority,
+    //     action: "CREATE_TASK_FOR_MONTH",
+    //   };
+    //   psApiCalling(params).then((res) => {
+    //     if (res.status === "success") {
+    //       toast.success(res.message);
+    //     } else {
+    //       toast.error(res.message);
+    //     }
+    //   });
+    // } else {
+    //   let params = {
+    //     employee_name: value.employee_name,
+    //     start_date: date,
+    //     time: time,
+    //     repeat_every: value.repeat_every,
+    //     repetation: value.repetation,
+    //     ends_on: ends_on,
+    //     action: "CREATE_NEW_TASK",
+    //     days: day,
+    //     task_header: value.task_header,
+    //     created_by: value.created_by,
+    //     priority: value.priority,
+    //     task: value.task,
+    //   };
+    //   console.log("params======>", params);
+    //   psApiCalling(params).then((res) => {
+    //     if (res.status === "success") {
+    //       toast.success(res.message);
+    //     } else {
+    //       toast.error(res.message);
+    //     }
+    //   });
+    // }
   };
+
+  const getTaskDetail = (id) => {
+    let params = { action: "GET_TASK_DETAILS", id: id };
+    psApiCalling(params).then((res) => {
+      form.setFieldsValue({
+        created_by: res.data.by_id,
+        priority: res.data.priority,
+        employee_name: res.data.eid,
+        start_date: moment(res.data.start_date, "YYYY-MM-DD"),
+        start_time: moment(res.data.time, "HH:mm:ss"),
+        repeat_every: res.data.repeat_every,
+        repetation: res.data.repetation,
+        ends_on: res.data.ends_on,
+        task_header: res.data.header,
+        task: res.data.task,
+      });
+      if (res.data.repetation === "Weekly") {
+        setShowWeek(true);
+        setShowType(false);
+        setShowOcu(true);
+      } else if (res.data.repetation === "Monthly") {
+        setShowWeek(false);
+        setShowType(true);
+        setShowOcu(true);
+      } else if (res.data.repetation === "Does not repeat") {
+        setShowWeek(false);
+        setShowType(false);
+        setShowOcu(false);
+      } else if (res.data.repetation === "Daily") {
+        setShowOcu(true);
+      }
+    });
+  };
+
+  useEffect(() => {
+    getTaskDetail(id);
+  }, []);
 
   useEffect(() => {
     getAllEmployeeList();
@@ -252,7 +288,7 @@ export default function CreateTaskForm() {
             style={{ marginTop: "0px" }}
           >
             <Card
-              title="Create New Task"
+              title="Update Task"
               style={{
                 width: "100%",
                 marginLeft: "1%",
@@ -260,6 +296,7 @@ export default function CreateTaskForm() {
               }}
             >
               <Form
+                form={form}
                 name="complex-form"
                 layout="vertical"
                 onFinish={onFinish}
@@ -904,7 +941,7 @@ export default function CreateTaskForm() {
                       htmlType="submit"
                       style={{ width: "100%", background: "#3E4095" }}
                     >
-                      Create New Task
+                      Update Task
                     </Button>
                   </Form.Item>
                 )}

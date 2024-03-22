@@ -9,20 +9,15 @@ export default function LeadList() {
   const [data, setData] = useState([]);
   const [col, setCol] = useState([
     {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
       title: "Status",
       dataIndex: "status",
       key: "status",
     },
-    {
-      title: "Action",
-      key: "action",
-      render: (_, record) => <></>,
-    },
+    // {
+    //   title: "Action",
+    //   key: "action",
+    //   render: (_, record) => <></>,
+    // },
   ]);
 
   const getLeadList = () => {

@@ -8,11 +8,11 @@ import { psApiCalling } from "../../Component/API/Index";
 export default function TaskList() {
   const [data, setData] = useState([]);
   const [col, setCol] = useState([
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
+    // {
+    //   title: "ID",
+    //   dataIndex: "id",
+    //   key: "id",
+    // },
     {
       title: "Task Code",
       key: "code",
@@ -27,9 +27,18 @@ export default function TaskList() {
       title: "Action",
       key: "action",
       render: (_, record) => (
-        <Button type="primary" href={"/viewTask/" + _.code + "/" + _.name}>
-          View Tasks
-        </Button>
+        <>
+          <Button type="primary" href={"/viewTask/" + _.code + "/" + _.name}>
+            View Tasks
+          </Button>{" "}
+          <Button
+            style={{ background: "#f1c40f" }}
+            type="primary"
+            href={"/editTask/" + _.code + "/" + _.id}
+          >
+            Edit Task
+          </Button>
+        </>
       ),
     },
   ]);

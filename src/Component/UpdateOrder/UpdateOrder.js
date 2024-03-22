@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { psApiCalling } from "../../Component/API/Index";
+import { psApiCalling } from "../API/Index";
 import {
   Button,
   Form,
@@ -22,22 +22,10 @@ import DatePickerNew from "react-multi-date-picker";
 
 const { Option } = Select;
 
-export default function CreateTaskForm() {
+export default function UpdateOrder(props) {
+  const { oid, code } = props;
+  const [form] = Form.useForm();
   const [value, setValue] = useState(new Date());
-  const [priority, setPriority] = useState([
-    {
-      label: "Low",
-      value: "Low",
-    },
-    {
-      label: "Medium",
-      value: "Medium",
-    },
-    {
-      label: "High",
-      value: "High",
-    },
-  ]);
   const [clientList, setClientList] = useState([]);
   const [locationList, setLocationList] = useState([]);
   const [filteredLocation, setFilteredLocation] = useState([]);
@@ -126,18 +114,52 @@ export default function CreateTaskForm() {
     setTime(timeString);
   };
 
-  const getAllEmployeeList = () => {
-    let params = { action: "GET_EMPLOYEE_LIST" };
+  const getAllClientList = () => {
+    let params = { action: "GET_ALL_LEADS" };
     psApiCalling(params).then((res) => {
       if (Array.isArray(res)) {
         setClientList(
           res.map((item) => {
             return {
               value: item.data.id,
-              label: item.data.full_name,
+              label: item.data.client_name,
             };
           })
         );
+      }
+    });
+  };
+
+  const getAllLocation = () => {
+    let params = { action: "GET_ALL_LOCATION" };
+    psApiCalling(params).then((res) => {
+      if (Array.isArray(res)) {
+        setLocationList(res);
+      }
+    });
+  };
+
+  const getServiceList = () => {
+    let params = { action: "GET_SERVICES_TYPE_LIST" };
+    psApiCalling(params).then((res) => {
+      if (Array.isArray(res)) {
+        setIndustryList(
+          res.map((item) => {
+            return {
+              value: item.id,
+              label: item.name,
+            };
+          })
+        );
+      }
+    });
+  };
+
+  const getServiceGuyList = () => {
+    let params = { action: "GET_SERVICE_GUY_LIST" };
+    psApiCalling(params).then((res) => {
+      if (Array.isArray) {
+        setServiceGuyList(res);
       }
     });
   };
@@ -181,21 +203,22 @@ export default function CreateTaskForm() {
       }
 
       let params = {
-        employee_name: value.employee_name,
-        start_date: date,
-        time: time,
+        client_name: value.client_name,
+        client_site: value.client_site,
+        service_type: value.service_type,
+        service_date: date,
+        service_time: time,
         repeat_every: value.repeat_every,
         repetation: value.repetation,
         ends_on: ends_on,
+        service_guy: value.service_guy,
         type: value.type,
         week: week,
         selected_day: selected_day,
         days: day,
-        task: value.task,
-        task_header: value.task_header,
-        created_by: value.created_by,
-        priority: value.priority,
-        action: "CREATE_TASK_FOR_MONTH",
+        oid: oid,
+        code: code,
+        action: "UPDATE_ORDER_FOR_MONTH",
       };
       psApiCalling(params).then((res) => {
         if (res.status === "success") {
@@ -206,20 +229,20 @@ export default function CreateTaskForm() {
       });
     } else {
       let params = {
-        employee_name: value.employee_name,
-        start_date: date,
-        time: time,
+        client_name: value.client_name,
+        client_site: value.client_site,
+        service_type: value.service_type,
+        service_date: date,
+        service_time: time,
         repeat_every: value.repeat_every,
         repetation: value.repetation,
         ends_on: ends_on,
-        action: "CREATE_NEW_TASK",
+        service_guy: value.service_guy,
+        action: "UPDATE_NEW_ORDER",
         days: day,
-        task_header: value.task_header,
-        created_by: value.created_by,
-        priority: value.priority,
-        task: value.task,
+        oid: oid,
+        code: code,
       };
-      console.log("params======>", params);
       psApiCalling(params).then((res) => {
         if (res.status === "success") {
           toast.success(res.message);
@@ -230,10 +253,56 @@ export default function CreateTaskForm() {
     }
   };
 
-  useEffect(() => {
-    getAllEmployeeList();
-  }, []);
+  const getOrderDetail = () => {
+    let params = { action: "GET_ORDER_DETAILS", oid: oid };
+    psApiCalling(params).then((res) => {
+      console.log(res);
+      if (res.status === "success") {
+        form.setFieldsValue({
+          client_name: res.data.cid,
+          client_site: res.data.site_id,
+          service_type: res.data.service_type,
+          service_date: moment(res.data.start_date, "YYYY-MM-DD"),
+          service_time: moment(res.data.service_time, "HH:mm"),
+          repeat_every: res.data.repeat_every,
+          repetation: res.data.repetation,
+          ends_on: res.data.ends_on,
+          service_guy: res.data.service_guy,
+        });
+        if (res.data.repetation === "Weekly") {
+          setShowWeek(true);
+          setShowType(false);
+          setShowOcu(true);
+        } else if (res.data.repetation === "Monthly") {
+          setShowWeek(false);
+          setShowType(true);
+          setShowOcu(true);
+        } else if (res.data.repetation === "Does not repeat") {
+          setShowWeek(false);
+          setShowType(false);
+          setShowOcu(false);
+        } else if (res.data.repetation === "Daily") {
+          setShowOcu(true);
+        }
+      }
+    });
+  };
 
+  useEffect(() => {
+    getAllClientList();
+  }, []);
+  useEffect(() => {
+    getAllLocation();
+  }, []);
+  useEffect(() => {
+    getServiceList();
+  }, []);
+  useEffect(() => {
+    getServiceGuyList();
+  }, []);
+  useEffect(() => {
+    getOrderDetail();
+  }, [oid]);
   return (
     <Box>
       <Box md={{ width: "100%" }} style={{ marginTop: "8px" }}>
@@ -252,7 +321,7 @@ export default function CreateTaskForm() {
             style={{ marginTop: "0px" }}
           >
             <Card
-              title="Create New Task"
+              title="Update Schedule"
               style={{
                 width: "100%",
                 marginLeft: "1%",
@@ -260,6 +329,7 @@ export default function CreateTaskForm() {
               }}
             >
               <Form
+                form={form}
                 name="complex-form"
                 layout="vertical"
                 onFinish={onFinish}
@@ -276,12 +346,12 @@ export default function CreateTaskForm() {
                   }}
                 >
                   <Form.Item
-                    label="Created By"
-                    name="created_by"
+                    label="Client Name"
+                    name="client_name"
                     rules={[
                       {
                         required: true,
-                        message: "Created By Employee is required",
+                        message: "Client name is required",
                       },
                     ]}
                     style={{
@@ -290,17 +360,18 @@ export default function CreateTaskForm() {
                     }}
                   >
                     <Select
-                      defaultValue="Select Employee"
-                      style={{
-                        width: "100%",
-                      }}
-                      showSearch
+                      showSearch={true}
+                      // filterOption
                       optionFilterProp="children"
+                      defaultValue="Select Client"
                       filterOption={(input, option) =>
                         option.label
                           .toLowerCase()
                           .indexOf(input.toLowerCase()) >= 0
                       }
+                      style={{
+                        width: "100%",
+                      }}
                       onChange={(v) => {
                         if (locationList.length > 0) {
                           let filter = locationList.filter(
@@ -320,125 +391,111 @@ export default function CreateTaskForm() {
                     />
                   </Form.Item>
                   <Form.Item
-                    label="Task Priority"
-                    name="priority"
+                    label="Client Site"
+                    name="client_site"
                     rules={[
                       {
                         required: true,
-                        message: "Task Priority is required",
+                        message: "Client email is required",
                       },
                     ]}
                     style={{
                       display: "inline-block",
                       width: "calc(50% - 8px)",
-                      marginLeft: "10px",
+                      margin: "0 8px",
                     }}
                   >
                     <Select
-                      defaultValue="Select Priority"
+                      defaultValue="Select Client Site"
+                      showSearch
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
                       style={{
                         width: "100%",
                       }}
-                      onChange={(v) => {}}
-                      options={priority}
+                      onChange={() => {}}
+                      options={locationList.map((item) => {
+                        return {
+                          value: item.aid,
+                          label: item.address,
+                        };
+                      })}
                     />
                   </Form.Item>
                 </Form.Item>
+                <Form.Item
+                  style={{
+                    marginBottom: 0,
+                  }}
+                >
+                  <Form.Item
+                    label="Service Type"
+                    name="service_type"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please selct service type",
+                      },
+                    ]}
+                    style={{
+                      display: "inline-block",
+                      width: "calc(50% - 8px)",
+                    }}
+                  >
+                    <Select
+                      defaultValue="Select Service Type"
+                      style={{
+                        width: "100%",
+                      }}
+                      showSearch
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
+                      onChange={() => {}}
+                      options={industryList}
+                    />
+                  </Form.Item>
 
-                <Form.Item
-                  style={{
-                    marginBottom: 0,
-                  }}
-                >
                   <Form.Item
-                    label="Select Employee"
-                    name="employee_name"
+                    label="Service Date"
+                    name="service_date"
                     rules={[
                       {
                         required: true,
-                        message: "Employee is required",
+                        message: "Service date is required",
                       },
                     ]}
                     style={{
                       display: "inline-block",
-                      width: "calc(100% - 8px)",
+                      width: "calc(23%)",
+                      margin: "0 8px",
                     }}
                   >
-                    <Select
-                      defaultValue="Select Employee"
-                      style={{
-                        width: "100%",
-                      }}
-                      showSearch
-                      optionFilterProp="children"
-                      filterOption={(input, option) =>
-                        option.label
-                          .toLowerCase()
-                          .indexOf(input.toLowerCase()) >= 0
-                      }
-                      onChange={(v) => {
-                        if (locationList.length > 0) {
-                          let filter = locationList.filter(
-                            (item) => item.lead_id === v
-                          );
-                          setFilteredLocation(
-                            filter.map((item) => {
-                              return {
-                                value: item.aid,
-                                label: item.address,
-                              };
-                            })
-                          );
-                        }
-                      }}
-                      options={clientList}
-                    />
-                  </Form.Item>
-                </Form.Item>
-                <Form.Item
-                  style={{
-                    marginBottom: 0,
-                  }}
-                >
-                  <Form.Item
-                    label="Start Date"
-                    name="start_date"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Start date is required",
-                      },
-                    ]}
-                    style={{
-                      display: "inline-block",
-                      width: "calc(48%)",
-                    }}
-                  >
-                    <DatePicker
-                      onChange={onChangeDate}
-                      style={{ width: "100%" }}
-                    />
+                    <DatePicker onChange={onChangeDate} />
                   </Form.Item>
                   <Form.Item
-                    label="Start Time"
-                    name="start_time"
+                    label="Service Time"
+                    name="service_time"
                     rules={[
                       {
                         required: true,
-                        message: "Start time is required",
+                        message: "Service time is required",
                       },
                     ]}
                     style={{
                       display: "inline-block",
-                      width: "calc(50%)",
-                      marginLeft: "10px",
+                      width: "calc(23%)",
+                      margin: "0 8px",
                     }}
                   >
-                    <TimePicker
-                      onChange={onChangeTime}
-                      style={{ width: "100%" }}
-                      format="h:mm a"
-                    />
+                    <TimePicker onChange={onChangeTime} format="h:mm a" />
                   </Form.Item>
                 </Form.Item>
 
@@ -479,7 +536,7 @@ export default function CreateTaskForm() {
                     }}
                   >
                     <Select
-                      defaultValue="Select Task Repetation"
+                      defaultValue="Select Service Repetation"
                       style={{
                         width: "100%",
                       }}
@@ -827,7 +884,7 @@ export default function CreateTaskForm() {
                         ]}
                         style={{
                           display: "inline-block",
-                          width: "calc(100% - 8px)",
+                          width: "calc(50% - 8px)",
                           margin: "0 8px",
                         }}
                       >
@@ -839,51 +896,35 @@ export default function CreateTaskForm() {
                       </Form.Item>
                     </>
                   ) : null}
-                </Form.Item>
-                <Form.Item
-                  style={{
-                    marginTop: 20,
-                  }}
-                >
                   <Form.Item
-                    label="Header"
-                    name="task_header"
+                    label="Service Guy"
+                    name="service_guy"
                     rules={[
                       {
                         required: true,
-                        message: "Task Header is required",
+                        message: "Service Guy is required",
                       },
                     ]}
                     style={{
                       display: "inline-block",
-                      width: "calc(100% - 8px)",
-                      margin: "0 8px",
+                      width: "calc(50% - 8px)",
                     }}
                   >
-                    <Input placeholder={"Task Header"} />
-                  </Form.Item>
-                </Form.Item>
-                <Form.Item
-                  style={{
-                    marginTop: 20,
-                  }}
-                >
-                  <Form.Item
-                    label="Task for this employee"
-                    name="task"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Task Message",
-                      },
-                    ]}
-                    style={{
-                      display: "inline-block",
-                      width: "calc(100% - 8px)",
-                      margin: "0 8px",
-                    }}
-                  >
-                    <Input.TextArea rows={5} />
+                    <Select
+                      defaultValue="Select Service Guy"
+                      style={{
+                        width: "100%",
+                      }}
+                      showSearch
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
+                      onChange={() => {}}
+                      options={serviceGuyList}
+                    />
                   </Form.Item>
                 </Form.Item>
                 {isLoading ? (
@@ -904,7 +945,7 @@ export default function CreateTaskForm() {
                       htmlType="submit"
                       style={{ width: "100%", background: "#3E4095" }}
                     >
-                      Create New Task
+                      Update Order
                     </Button>
                   </Form.Item>
                 )}

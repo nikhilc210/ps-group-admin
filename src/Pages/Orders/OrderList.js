@@ -8,11 +8,11 @@ import { psApiCalling } from "../../Component/API/Index";
 export default function OrderList() {
   const [data, setData] = useState([]);
   const [col, setCol] = useState([
-    {
-      title: "No",
-      dataIndex: "id",
-      key: "id",
-    },
+    // {
+    //   title: "No",
+    //   dataIndex: "id",
+    //   key: "id",
+    // },
     {
       title: "Client",
 
@@ -22,11 +22,25 @@ export default function OrderList() {
 
     {
       title: "View Details",
-      key: "action",
+      key: "details",
       render: (item, record) => (
         <>
           <Button type="primary" href={"/serviceList/" + item.cid}>
             View Services
+          </Button>
+        </>
+      ),
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (item, record) => (
+        <>
+          <Button
+            type="primary"
+            href={"/editService/" + item.id + "/" + item.serviceCode}
+          >
+            Edit
           </Button>
         </>
       ),
@@ -76,7 +90,7 @@ export default function OrderList() {
             style={{ marginTop: "0px" }}
           >
             <Card
-              title="Client's Orders"
+              title="Client's Schedule"
               extra={
                 <Button
                   href="/createNewOrder"

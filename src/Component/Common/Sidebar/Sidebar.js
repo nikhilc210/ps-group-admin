@@ -26,7 +26,9 @@ import { TbStatusChange } from "react-icons/tb";
 import { Box } from "@mui/material";
 import "./Sidebar.css";
 
-export default function Sidebar() {
+export default function Sidebar(props) {
+  const { to } = props;
+
   const [menu, setMenu] = useState([]);
   const [name, setName] = useState("");
   const [id, setId] = useState("");
@@ -44,6 +46,7 @@ export default function Sidebar() {
   useEffect(() => {
     getSession();
   });
+  console.log("/dashboard" === to);
 
   const menuUpdate = () => {
     setMenu([
@@ -51,6 +54,7 @@ export default function Sidebar() {
         id: 1,
         menu: "Dashboard",
         link: "/dashboard",
+
         icon: (
           <MdSpaceDashboard
             customClassName="nav-icon"
@@ -97,7 +101,7 @@ export default function Sidebar() {
       },
       {
         id: 3,
-        menu: "Orders",
+        menu: "Schedule",
         link: "/orders",
         icon: (
           <MdOutlineFavoriteBorder
@@ -155,30 +159,30 @@ export default function Sidebar() {
           />
         ),
       },
-      {
-        id: 8,
-        menu: "Website Request",
-        link: "/website_request",
-        icon: (
-          <AiOutlinePullRequest
-            customClassName="nav-icon"
-            style={{ marginRight: "10px" }}
-            color={"#ffffff"}
-          />
-        ),
-      },
-      {
-        id: 9,
-        menu: "Employee Attandance",
-        link: "/attandance",
-        icon: (
-          <AiOutlinePullRequest
-            customClassName="nav-icon"
-            style={{ marginRight: "10px" }}
-            color={"#ffffff"}
-          />
-        ),
-      },
+      // {
+      //   id: 8,
+      //   menu: "Website Request",
+      //   link: "/website_request",
+      //   icon: (
+      //     <AiOutlinePullRequest
+      //       customClassName="nav-icon"
+      //       style={{ marginRight: "10px" }}
+      //       color={"#ffffff"}
+      //     />
+      //   ),
+      // },
+      // {
+      //   id: 9,
+      //   menu: "Employee Attandance",
+      //   link: "/attandance",
+      //   icon: (
+      //     <AiOutlinePullRequest
+      //       customClassName="nav-icon"
+      //       style={{ marginRight: "10px" }}
+      //       color={"#ffffff"}
+      //     />
+      //   ),
+      // },
       {
         id: 10,
         menu: "Leave Application",
@@ -257,7 +261,10 @@ export default function Sidebar() {
                   overflow: "auto",
                 }}
               >
-                <CNavItem href={item.link}>
+                <CNavItem
+                  href={item.link}
+                  active={item.link === to ? true : false}
+                >
                   {item.icon} {item.menu}
                 </CNavItem>
               </CSidebarNav>

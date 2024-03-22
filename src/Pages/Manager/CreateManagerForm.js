@@ -182,7 +182,12 @@ export default function CreateManagerForm() {
                       margin: "0 8px",
                     }}
                   >
-                    <Input placeholder="Email Address" />
+                    <Input
+                      placeholder="Email Address"
+                      onInput={(e) =>
+                        (e.target.value = e.target.value.toLowerCase())
+                      }
+                    />
                   </Form.Item>
                 </Form.Item>
                 <Form.Item
@@ -221,7 +226,7 @@ export default function CreateManagerForm() {
                       margin: "0 8px",
                     }}
                   >
-                    <Input placeholder="Phone Number" />
+                    <Input placeholder="Phone Number" maxLength={10} />
                   </Form.Item>
                 </Form.Item>
 
@@ -277,7 +282,7 @@ export default function CreateManagerForm() {
                       margin: "0 8px",
                     }}
                   >
-                    <Input placeholder="AADHAR Number" />
+                    <Input placeholder="AADHAR Number" maxLength={12} />
                   </Form.Item>
                 </Form.Item>
 
@@ -300,7 +305,7 @@ export default function CreateManagerForm() {
                       width: "calc(50% - 8px)",
                     }}
                   >
-                    <Input placeholder="PAN Number" />
+                    <Input placeholder="PAN Number" maxLength={10} />
                   </Form.Item>
                   <Form.Item
                     label="Bank Name"

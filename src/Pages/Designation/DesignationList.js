@@ -7,6 +7,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { psApiCalling } from "../../Component/API/Index";
 
 export default function DesignationList() {
+  const [updateForm] = Form.useForm();
   const [open, setOpen] = useState(false);
   const [update, setUpdate] = useState(false);
   const [updatedId, setUpdatedId] = useState(null);
@@ -15,12 +16,15 @@ export default function DesignationList() {
   const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
   const [designtionList, setDesigntionList] = useState([]);
+  const [updatedID, setUpdatedID] = useState(null);
+  const [updatedName, setUpdatedName] = useState(null);
+  const [updatedParent, setUpdatedParent] = useState(null);
   const [col, setCol] = useState([
-    {
-      title: "ID",
-      key: "id",
-      render: (item) => <p>{item.id}</p>,
-    },
+    // {
+    //   title: "ID",
+    //   key: "id",
+    //   render: (item) => <p>{item.id}</p>,
+    // },
     {
       title: "Designation",
       key: "designation",
@@ -33,22 +37,52 @@ export default function DesignationList() {
       render: (item) => <p>{item.parent}</p>,
     },
 
-    // {
-    //   title: "Action",
-    //   key: "action",
-    //   render: (item, record) => (
-    //     <>
-    //       <Button
-    //         type="primary"
-    //         style={{ background: "#feca57" }}
-    //         onClick={() => {}}
-    //       >
-    //         Delete
-    //       </Button>
-    //     </>
-    //   ),
-    // },
+    {
+      title: "Action",
+      key: "action",
+      render: (item, record) => (
+        <>
+          <Button
+            type="primary"
+            style={{ background: "#fdcb6e" }}
+            onClick={() => {
+              setUpdate(true);
+              setUpdatedID(item.id);
+              setUpdatedName(item.designation);
+              setUpdatedParent(item.pid);
+              updateForm.setFieldsValue({
+                designation: item.designation,
+                parent: item.pid,
+              });
+            }}
+          >
+            Edit
+          </Button>{" "}
+          <Button
+            type="primary"
+            style={{ background: "#d63031" }}
+            onClick={() => {
+              deleteDesignation(item.id);
+            }}
+          >
+            Delete
+          </Button>
+        </>
+      ),
+    },
   ]);
+
+  const deleteDesignation = (id) => {
+    let params = { action: "DELETE_DESIGNATION", id: id };
+    psApiCalling(params).then((res) => {
+      if (res.status === "success") {
+        toast.success(res.message);
+        getAllDesignation();
+      } else {
+        toast.error(res.message);
+      }
+    });
+  };
 
   const getDesignation = () => {
     let params = {
@@ -83,14 +117,15 @@ export default function DesignationList() {
   const onFinishUpdate = (value) => {
     setIsLoading(true);
     let params = {
-      action: "UPDATE_SITE_ADDRESS",
-      aid: updatedId,
-
-      address: value.site_address,
+      action: "UPDATE_DESIGNATION",
+      id: updatedID,
+      name: value.designation,
+      parent: value.parent,
     };
     psApiCalling(params).then((res) => {
       setIsLoading(false);
       if (res.status === "success") {
+        getAllDesignation();
         toast.success(res.message);
         setUpdate(false);
       } else {
@@ -126,7 +161,7 @@ export default function DesignationList() {
           sx={{ flexDirection: { xs: "column", md: "row" } }}
         >
           <Grid
-            md={10}
+            md={12}
             container
             rowSpacing={1}
             columnSpacing={{ xs: 1, sm: 1, md: 1 }}
@@ -225,7 +260,7 @@ export default function DesignationList() {
                   htmlType="submit"
                   style={{ width: "100%", background: "#3E4095" }}
                 >
-                  Create Site
+                  Create Designation
                 </Button>
               )}
             </Form.Item>
@@ -233,7 +268,7 @@ export default function DesignationList() {
         </div>
       </Modal>
       <Modal
-        title="Add New Site"
+        title="Update Designation"
         centered
         open={update}
         width={600}
@@ -243,7 +278,7 @@ export default function DesignationList() {
         <Divider />
         <div>
           <Form
-            form={form}
+            form={updateForm}
             layout="vertical"
             style={{
               marginBottom: 0,
@@ -251,13 +286,12 @@ export default function DesignationList() {
             onFinish={onFinishUpdate}
           >
             <Form.Item
-              label="Site Address"
-              name="site_address"
-              value={currentAdd}
+              label="Designation Name"
+              name="designation"
               rules={[
                 {
                   required: true,
-                  message: "Site Address is required",
+                  message: "Designation name is required",
                 },
               ]}
               style={{
@@ -265,7 +299,26 @@ export default function DesignationList() {
                 width: "calc(99.8% - 8px)",
               }}
             >
-              <Input placeholder="Site Address" value={currentAdd} />
+              <Input placeholder="Designation Name" />
+            </Form.Item>
+            <Form.Item
+              label="Parent Designation"
+              name="parent"
+              rules={[
+                {
+                  required: true,
+                  message: "Parent Designation is required",
+                },
+              ]}
+              style={{
+                display: "inline-block",
+                width: "calc(99.8% - 8px)",
+              }}
+            >
+              <Select
+                placeholder={"Select Parent Designation"}
+                options={designtionList}
+              />
             </Form.Item>
             <Form.Item label=" " colon={false}>
               {isLoading ? (
@@ -283,9 +336,9 @@ export default function DesignationList() {
                 <Button
                   type="primary"
                   htmlType="submit"
-                  style={{ width: "100%", background: "#feca57" }}
+                  style={{ width: "100%", background: "#3E4095" }}
                 >
-                  Update Site
+                  Update Designation
                 </Button>
               )}
             </Form.Item>

@@ -7,7 +7,7 @@ export default function Index(props) {
       <Table
         columns={props.col}
         dataSource={props.data}
-        scroll={{ x: "calc(700px + 50%)", y: 640 }}
+        scroll={{ x: "100%", y: "100%" }}
       />
     </div>
   );

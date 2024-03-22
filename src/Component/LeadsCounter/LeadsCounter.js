@@ -7,11 +7,11 @@ import Table from "../../Component/Table/Table";
 export default function LeadsCounter() {
   const [data, setData] = useState([]);
   const [col, setCol] = useState([
-    {
-      title: "ID",
-      key: "id",
-      render: (item, record) => <>{item.data.id}</>,
-    },
+    // {
+    //   title: "ID",
+    //   key: "id",
+    //   render: (item, record) => <>{item.data.id}</>,
+    // },
     {
       title: "Lead ID",
       key: "lead_id",
@@ -39,6 +39,7 @@ export default function LeadsCounter() {
     {
       title: "Client Email",
       key: "client_email",
+      width: "180px",
       render: (item, record) => (
         <Tag color="#feca57">{item.data.client_email}</Tag>
       ),
@@ -58,7 +59,7 @@ export default function LeadsCounter() {
     },
     {
       title: "Contact Persons",
-
+      width: "180px",
       render: (item, record) => (
         <Button
           href={

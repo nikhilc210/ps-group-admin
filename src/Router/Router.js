@@ -37,6 +37,10 @@ import Designation from "../Pages/Designation/Designation";
 import Task from "../Pages/Task/Task";
 import CreateTask from "../Pages/Task/CreateTask";
 import ViewTask from "../Pages/Task/ViewTask";
+import EditManager from "../Pages/Manager/EditManager";
+import EditWebsiteService from "../Pages/WebsiteService/EditWebsiteService";
+import EditOrder from "../Pages/Orders/EditOrder";
+import EditTask from "../Pages/Task/EditTask";
 export default function Index() {
   return (
     <Router>
@@ -90,6 +94,13 @@ export default function Index() {
         <Route path="/task" element={<Task />}></Route>
         <Route path="/createTask" element={<CreateTask />}></Route>
         <Route path="/viewTask/:code/:name" element={<ViewTask />}></Route>
+        <Route path="/editManager/:id" element={<EditManager />}></Route>
+        <Route
+          path="/editWebsiteService/:id"
+          element={<EditWebsiteService />}
+        ></Route>
+        <Route path="/editService/:id/:code" element={<EditOrder />}></Route>
+        <Route path="/editTask/:id/:code" element={<EditTask />}></Route>
       </Routes>
     </Router>
   );
