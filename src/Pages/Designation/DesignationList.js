@@ -152,44 +152,36 @@ export default function DesignationList() {
   }, []);
 
   return (
-    <Box>
-      <Box md={{ width: "100%" }} style={{ marginTop: "8px" }}>
+    <>
+      <Box style={{ marginTop: "8px" }}>
         <Grid
-          container
-          rowSpacing={1}
-          columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-          sx={{ flexDirection: { xs: "column", md: "row" } }}
+          md={12}
+          style={{
+            marginTop: "0px",
+            msOverflowStyle: "none",
+            scrollbarWidth: "0px",
+          }}
         >
-          <Grid
-            md={12}
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-            sx={{ flexDirection: { xs: "column", md: "row" } }}
-            style={{ marginTop: "0px" }}
+          <Card
+            title="Designations"
+            style={{
+              marginTop: "30px",
+              msOverflowStyle: "none",
+            }}
+            extra={
+              <Button
+                style={{ background: "#5f27cd", color: "#FFFFFF" }}
+                onClick={() => setOpen(true)}
+              >
+                Add New Designation
+              </Button>
+            }
           >
-            <Card
-              title="Designations"
-              style={{
-                width: "98%",
-                marginLeft: "1%",
-                marginTop: "30px",
-                overflow: "scroll",
-              }}
-              extra={
-                <Button
-                  style={{ background: "#5f27cd", color: "#FFFFFF" }}
-                  onClick={() => setOpen(true)}
-                >
-                  Add New Designation
-                </Button>
-              }
-            >
-              <Table data={data} col={col} />
-            </Card>
-          </Grid>
+            <Table data={data} col={col} />
+          </Card>
         </Grid>
       </Box>
+      <ToastContainer />
       <Modal
         title="Add New Designation"
         centered
@@ -345,7 +337,6 @@ export default function DesignationList() {
           </Form>
         </div>
       </Modal>
-      <ToastContainer />
-    </Box>
+    </>
   );
 }

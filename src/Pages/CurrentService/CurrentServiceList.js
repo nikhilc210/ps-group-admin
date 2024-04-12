@@ -13,10 +13,14 @@ export default function CurrentServiceList(props) {
       title: "Service Date",
 
       key: "service_date",
-      render: (item, record) => <Tag color="#0be881">{item.date}</Tag>,
+      render: (item, record) => (
+        <Tag color="#0be881">
+          {moment(item.date, "YYYY-MM-DD").format("DD-MM-YYYY")}
+        </Tag>
+      ),
     },
     {
-      title: "Service Guy",
+      title: "Service Person",
       render: (item, record) => <Tag color="#3c40c6">{item.full_name}</Tag>,
       key: "service_guy",
     },
@@ -91,40 +95,28 @@ export default function CurrentServiceList(props) {
   };
 
   return (
-    <Box>
-      <Box
-        md={{ width: "100%" }}
-        style={{ marginTop: "8px", overflow: "scroll" }}
-      >
+    <>
+      <Box style={{ marginTop: "8px" }}>
         <Grid
-          container
-          rowSpacing={1}
-          columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-          sx={{ flexDirection: { xs: "column", md: "row" } }}
+          md={12}
+          style={{
+            marginTop: "0px",
+            msOverflowStyle: "none",
+            scrollbarWidth: "0px",
+          }}
         >
-          <Grid
-            md={12}
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-            sx={{ flexDirection: { xs: "column", md: "row" } }}
-            style={{ marginTop: "0px" }}
+          <Card
+            title={"Today's (" + today() + ") Schedule"}
+            style={{
+              marginTop: "30px",
+              msOverflowStyle: "none",
+            }}
           >
-            <Card
-              title={"Today's (" + today() + ") Schedule"}
-              style={{
-                width: "98%",
-                marginLeft: "1%",
-                marginTop: "30px",
-                overflow: "scroll",
-              }}
-            >
-              <Table data={data} col={col} />
-            </Card>
-          </Grid>
+            <Table data={data} col={col} />
+          </Card>
         </Grid>
       </Box>
       <ToastContainer />
-    </Box>
+    </>
   );
 }

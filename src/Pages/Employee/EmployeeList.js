@@ -41,52 +41,52 @@ export default function EmployeeList() {
     //   key: "id",
     //   render: (_, record) => <>{_.data.id}</>,
     // },
-    {
-      title: "Employee Code",
-      key: "code",
-      render: (_, record) => <Tag color={"purple"}>{_.data.user_code}</Tag>,
-    },
+    // {
+    //   title: "Employee Code",
+    //   key: "code",
+    //   render: (_, record) => <Tag color={"purple"}>{_.data.user_code}</Tag>,
+    // },
     {
       title: "Fullname",
       key: "fullname",
       render: (_, record) => <>{_.data.full_name}</>,
     },
     {
-      title: "Employee Designation",
+      title: "Designation",
       key: "type",
       render: (_, record) => <Tag color={"#b8e994"}>{_.designation}</Tag>,
     },
     {
-      title: "Email Address",
+      title: "Email",
       key: "emailAddress",
       render: (_, record) => <Tag color={"green"}>{_.data.user_email}</Tag>,
     },
 
     {
-      title: "Phone Number",
+      title: "Phone",
       key: "phone",
       render: (_, record) => <Tag color={"#30336b"}>{_.data.phone_number}</Tag>,
     },
     {
-      title: "Employee DOB",
+      title: "DOB",
       key: "dob",
       render: (_, record) => <Tag color={"#16a085"}>{_.data.user_dob}</Tag>,
     },
     {
-      title: "Employee Gender",
+      title: "Gender",
       key: "gender",
       render: (_, record) => <Tag color={"#d35400"}>{_.data.user_gender}</Tag>,
     },
-    {
-      title: "Employee Role",
-      key: "type",
-      render: (_, record) => <Tag color={"#b8e994"}>{_.data.employe_role}</Tag>,
-    },
-    {
-      title: "Created Time",
-      key: "created_time",
-      render: (_, record) => <Tag color={"#1e3799"}>{_.data.created_time}</Tag>,
-    },
+    // {
+    //   title: "Role",
+    //   key: "type",
+    //   render: (_, record) => <Tag color={"#b8e994"}>{_.data.employe_role}</Tag>,
+    // },
+    // {
+    //   title: "Created Time",
+    //   key: "created_time",
+    //   render: (_, record) => <Tag color={"#1e3799"}>{_.data.created_time}</Tag>,
+    // },
 
     // {
     //   title: "Status",
@@ -180,42 +180,33 @@ export default function EmployeeList() {
   }, []);
 
   return (
-    <Box style={{ width: "100%" }}>
+    <>
       <Box style={{ marginTop: "8px" }}>
         <Grid
-          container
-          rowSpacing={1}
-          columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-          md={{ flexDirection: { xs: "column", md: "row" } }}
+          md={12}
+          style={{
+            marginTop: "0px",
+            msOverflowStyle: "none",
+            scrollbarWidth: "0px",
+          }}
         >
-          <Grid
-            md={12}
-            style={{ width: "100%", marginTop: "0px" }}
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-            sx={{ flexDirection: { xs: "column", md: "row" } }}
+          <Card
+            title="Employee List"
+            extra={
+              <Button
+                href="/createEmployee"
+                style={{ background: "#5f27cd", color: "#FFFFFF" }}
+              >
+                Create New Employee
+              </Button>
+            }
+            style={{
+              marginTop: "30px",
+              msOverflowStyle: "none",
+            }}
           >
-            <Card
-              title="Employee List"
-              extra={
-                <Button
-                  href="/createEmployee"
-                  style={{ background: "#5f27cd", color: "#FFFFFF" }}
-                >
-                  Create New Employee
-                </Button>
-              }
-              style={{
-                width: "100%",
-                marginLeft: "1%",
-                marginTop: "30px",
-                overflow: "scroll",
-              }}
-            >
-              <Table data={data} col={col} />
-            </Card>
-          </Grid>
+            <Table data={data} col={col} />
+          </Card>
         </Grid>
       </Box>
       <ToastContainer />
@@ -273,6 +264,6 @@ export default function EmployeeList() {
           </Form.Item>
         </Form>
       </Modal>
-    </Box>
+    </>
   );
 }

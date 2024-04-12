@@ -339,6 +339,13 @@ export default function CreateTaskForm() {
                       style={{
                         width: "100%",
                       }}
+                      showSearch
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
                       onChange={(v) => {}}
                       options={priority}
                     />
@@ -483,6 +490,13 @@ export default function CreateTaskForm() {
                       style={{
                         width: "100%",
                       }}
+                      showSearch
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
                       onChange={(v) => {
                         if (v === "Weekly") {
                           setShowWeek(true);
@@ -523,6 +537,13 @@ export default function CreateTaskForm() {
                         style={{
                           width: "100% - 8px",
                         }}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.label
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }
                         onChange={(v) => {
                           if (v === "Day Wise") {
                             setShowWeek(true);
@@ -564,6 +585,13 @@ export default function CreateTaskForm() {
                     >
                       <Select
                         defaultValue="Select Week"
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.label
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }
                         style={{
                           width: "100% - 8px",
                           marginLeft: "5px",
@@ -612,6 +640,13 @@ export default function CreateTaskForm() {
                           width: "100% - 8px",
                           marginLeft: "5px",
                         }}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.label
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }
                         onChange={(v) => {
                           console.log(v);
                         }}

@@ -8,11 +8,11 @@ import { psApiCalling } from "../../Component/API/Index";
 export default function EmployeeTaskList(props) {
   const [data, setData] = useState([]);
   const [col, setCol] = useState([
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
+    // {
+    //   title: "ID",
+    //   dataIndex: "id",
+    //   key: "id",
+    // },
     {
       title: "Task Date",
       key: "date",

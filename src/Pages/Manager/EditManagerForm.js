@@ -14,7 +14,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { Grid, Box } from "@mui/material";
 import moment from "moment";
 import { psApiCalling } from "../../Component/API/Index";
-
+import dayjs from "dayjs";
 const { Option } = Select;
 
 export default function EditManagerForm() {
@@ -28,7 +28,7 @@ export default function EditManagerForm() {
         console.log(res);
         form.setFieldsValue({
           employee_name: res.data.full_name,
-          employee_dob: moment(res.data.user_dob, "DD-MM-YYYY"),
+          employee_dob: dayjs(res.data.user_dob, "DD-MM-YYYY"),
           employee_gender: res.data.user_gender,
           employee_email: res.data.user_email,
           employee_role: res.data.employe_role,
@@ -264,7 +264,11 @@ export default function EditManagerForm() {
                       margin: "0 8px",
                     }}
                   >
-                    <Input placeholder="Phone Number" maxLength={10} />
+                    <Input
+                      placeholder="Phone Number"
+                      maxLength={10}
+                      type="number"
+                    />
                   </Form.Item>
                 </Form.Item>
 
@@ -320,7 +324,11 @@ export default function EditManagerForm() {
                       margin: "0 8px",
                     }}
                   >
-                    <Input placeholder="AADHAR Number" maxLength={12} />
+                    <Input
+                      placeholder="AADHAR Number"
+                      maxLength={12}
+                      type="number"
+                    />
                   </Form.Item>
                 </Form.Item>
 
@@ -385,7 +393,7 @@ export default function EditManagerForm() {
                       margin: "0 8px",
                     }}
                   >
-                    <Input placeholder="Bank Account Number" />
+                    <Input placeholder="Bank Account Number" type="number" />
                   </Form.Item>
                 </Form.Item>
 

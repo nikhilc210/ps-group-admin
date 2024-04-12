@@ -4,6 +4,7 @@ import { Card, Space, Button, Tag, Form, Input, Select } from "antd";
 import { ToastContainer, toast } from "react-toastify";
 import Table from "../../Component/Table/Table";
 import { psApiCalling } from "../../Component/API/Index";
+import moment from "moment";
 
 export default function ClientServicesList() {
   const [cid, setCid] = useState(window.location.pathname.split("/")[2]);
@@ -11,13 +12,13 @@ export default function ClientServicesList() {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [col, setCol] = useState([
-    {
-      title: "No",
-      dataIndex: "id",
-      key: "id",
-      width: "auto",
-      width: "80px",
-    },
+    // {
+    //   title: "No",
+    //   dataIndex: "id",
+    //   key: "id",
+    //   width: "auto",
+    //   width: "80px",
+    // },
     {
       title: "Client",
 
@@ -33,13 +34,28 @@ export default function ClientServicesList() {
     },
     {
       title: "Start Date",
-      render: (item, record) => <Tag color="#00d8d6">{item.start_date}</Tag>,
+      render: (item, record) => (
+        <Tag color="#00d8d6">
+          {moment(item.start_date, "YYYY-MM-DD").format("DD-MM-YYYY")}
+        </Tag>
+      ),
       key: "start_date",
       width: "auto",
     },
     {
+      title: "Time",
+      render: (item, record) => <Tag color="#00d8d6">{item.service_time}</Tag>,
+      key: "time",
+      width: "auto",
+    },
+    {
       title: "End Date",
-      render: (item, record) => <Tag color="#ef5777">{item.end_date}</Tag>,
+      render: (item, record) => (
+        <Tag color="#ef5777">
+          {" "}
+          {moment(item.end_date, "YYYY-MM-DD").format("DD-MM-YYYY")}
+        </Tag>
+      ),
       key: "end_date",
       width: "auto",
     },
@@ -124,88 +140,72 @@ export default function ClientServicesList() {
   const onFinish = () => {};
 
   return (
-    <Box>
-      <Box
-        md={{ width: "100%" }}
-        style={{ marginTop: "8px", overflow: "scroll" }}
-      >
+    <>
+      <Box style={{ marginTop: "8px" }}>
         <Grid
-          container
-          rowSpacing={1}
-          columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-          sx={{ flexDirection: { xs: "column", md: "row" } }}
+          md={12}
+          style={{
+            marginTop: "0px",
+            msOverflowStyle: "none",
+            scrollbarWidth: "0px",
+          }}
         >
-          <Grid
-            md={12}
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-            sx={{ flexDirection: { xs: "column", md: "row" } }}
-            style={{ marginTop: "0px" }}
-          >
-            <Card
-              title="Orders"
-              extra={
-                <Form
-                  name="complex-form"
-                  layout="vertical"
-                  onFinish={onFinish}
-                  labelCol={{
-                    span: 12,
-                  }}
-                  wrapperCol={{
-                    span: 64,
+          <Card
+            title="Orders"
+            extra={
+              <Form
+                name="complex-form"
+                layout="vertical"
+                onFinish={onFinish}
+                labelCol={{
+                  span: 12,
+                }}
+                wrapperCol={{
+                  span: 64,
+                }}
+              >
+                <Form.Item
+                  style={{
+                    marginBottom: 0,
                   }}
                 >
                   <Form.Item
+                    label="Client Site"
+                    name="select_sites"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Select Site",
+                      },
+                    ]}
                     style={{
-                      marginBottom: 0,
+                      display: "inline-block",
+                      width: "calc(100%)",
+                      marginRight: "250px",
                     }}
                   >
-                    <Form.Item
-                      label="Client Site"
-                      name="select_sites"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Select Site",
-                        },
-                      ]}
+                    <Select
+                      defaultValue="All Sites"
                       style={{
-                        display: "inline-block",
-                        width: "calc(200%)",
-                        marginRight: "50px",
+                        width: "100%",
                       }}
-                    >
-                      <Select
-                        defaultValue="All Sites"
-                        style={{
-                          width: "100%",
-                        }}
-                        onChange={(v) => {
-                          console.log(v);
-                          let arr = data.filter((item) => item.site_id === v);
-                          setFilteredData(arr);
-                        }}
-                        options={sites}
-                      />
-                    </Form.Item>
+                      onChange={(v) => {
+                        console.log(v);
+                        let arr = data.filter((item) => item.site_id === v);
+                        setFilteredData(arr);
+                      }}
+                      options={sites}
+                    />
                   </Form.Item>
-                </Form>
-              }
-              style={{
-                width: "98%",
-                marginLeft: "1%",
-                marginTop: "30px",
-                overflow: "scroll",
-              }}
-            >
-              <Table data={filteredData} col={col} />
-            </Card>
-          </Grid>
+                </Form.Item>
+              </Form>
+            }
+          >
+            <Table data={data} col={col} />
+          </Card>
         </Grid>
       </Box>
       <ToastContainer />
-    </Box>
+    </>
   );
 }

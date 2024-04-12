@@ -18,6 +18,7 @@ export default function UpdateEmployee() {
   );
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState({});
+  const [reporting, setReporting] = useState(null);
 
   const [form] = Form.useForm();
 
@@ -57,6 +58,7 @@ export default function UpdateEmployee() {
     let params = { action: "GET_EMPLOYEE_DETAILS", eid: employee_id };
     psApiCalling(params).then((res) => {
       if (res.status === "success") {
+        setReporting(res.reporting);
         setData(res.data);
         // form.setFieldsValue({
         //   employee_name: res.data.employee_name,
@@ -117,6 +119,7 @@ export default function UpdateEmployee() {
                         <UpdateEmployeeForm
                           employee_id={employee_id}
                           data={data}
+                          reporting={reporting}
                         />
                       </Card>
                     </Grid>

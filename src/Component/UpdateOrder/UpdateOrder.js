@@ -105,6 +105,10 @@ export default function UpdateOrder(props) {
       checked: false,
     },
   ]);
+  function disabledDate(current) {
+    // Can not select days before today
+    return current && current < moment().startOf("day");
+  }
   const onChangeDate = (date, dateString) => {
     console.log(dateString);
     setDate(dateString);
@@ -208,7 +212,7 @@ export default function UpdateOrder(props) {
         service_type: value.service_type,
         service_date: date,
         service_time: time,
-        repeat_every: value.repeat_every,
+        repeat_every: "1",
         repetation: value.repetation,
         ends_on: ends_on,
         service_guy: value.service_guy,
@@ -234,7 +238,7 @@ export default function UpdateOrder(props) {
         service_type: value.service_type,
         service_date: date,
         service_time: time,
-        repeat_every: value.repeat_every,
+        repeat_every: "1",
         repetation: value.repetation,
         ends_on: ends_on,
         service_guy: value.service_guy,
@@ -264,7 +268,7 @@ export default function UpdateOrder(props) {
           service_type: res.data.service_type,
           service_date: moment(res.data.start_date, "YYYY-MM-DD"),
           service_time: moment(res.data.service_time, "HH:mm"),
-          repeat_every: res.data.repeat_every,
+          // repeat_every: res.data.repeat_every,
           repetation: res.data.repetation,
           ends_on: res.data.ends_on,
           service_guy: res.data.service_guy,
@@ -504,7 +508,7 @@ export default function UpdateOrder(props) {
                     marginBottom: 0,
                   }}
                 >
-                  <Form.Item
+                  {/* <Form.Item
                     label="Repeat Every"
                     name="repeat_every"
                     rules={[
@@ -520,9 +524,9 @@ export default function UpdateOrder(props) {
                     }}
                   >
                     <InputNumber min={1} max={365} style={{ width: "100%" }} />
-                  </Form.Item>
+                  </Form.Item> */}
                   <Form.Item
-                    label="Repeation"
+                    label="Repetition"
                     name="repetation"
                     rules={[
                       {
@@ -532,7 +536,7 @@ export default function UpdateOrder(props) {
                     ]}
                     style={{
                       display: "inline-block",
-                      width: "calc(50% - 8px)",
+                      width: "calc(100% - 16px)",
                     }}
                   >
                     <Select
@@ -540,6 +544,13 @@ export default function UpdateOrder(props) {
                       style={{
                         width: "100%",
                       }}
+                      showSearch
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
                       onChange={(v) => {
                         if (v === "Weekly") {
                           setShowWeek(true);
@@ -580,6 +591,13 @@ export default function UpdateOrder(props) {
                         style={{
                           width: "100% - 8px",
                         }}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.label
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }
                         onChange={(v) => {
                           if (v === "Day Wise") {
                             setShowWeek(true);
@@ -625,6 +643,13 @@ export default function UpdateOrder(props) {
                           width: "100% - 8px",
                           marginLeft: "5px",
                         }}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.label
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }
                         onChange={(v) => {}}
                         options={[
                           {
@@ -672,6 +697,13 @@ export default function UpdateOrder(props) {
                         onChange={(v) => {
                           console.log(v);
                         }}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.label
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }
                         options={[
                           {
                             label: "1",
@@ -945,7 +977,7 @@ export default function UpdateOrder(props) {
                       htmlType="submit"
                       style={{ width: "100%", background: "#3E4095" }}
                     >
-                      Update Order
+                      Update Schedule
                     </Button>
                   </Form.Item>
                 )}

@@ -25,6 +25,8 @@ export default function ContactPersonList(props) {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
+  const [updateForm] = Form.useForm();
+  const [cid, setCid] = useState("");
   const [col, setCol] = useState([
     // {
     //   title: "ID",
@@ -49,12 +51,11 @@ export default function ContactPersonList(props) {
     },
     {
       title: "Contact Person Phone",
-      key: "email",
+      key: "phone",
       render: (item) => <Tag color={"#5f27cd"}>{item.phone}</Tag>,
     },
 
     {
-      /* {
       title: "Action",
       key: "action",
       render: (item, record) => (
@@ -64,19 +65,41 @@ export default function ContactPersonList(props) {
             style={{ background: "#feca57" }}
             onClick={() => {
               setUpdate(true);
-              setCurrentAdd(item.data.address);
-              setUpdatedId(item.data.id);
-
-              form.setFieldsValue({ site_address: item.data.address });
+              setCid(item.id);
+              updateForm.setFieldsValue({
+                site_address: item.address,
+                name: item.name,
+                email: item.email,
+                phone: item.phone,
+              });
             }}
           >
             Edit
+          </Button>{" "}
+          <Button
+            danger
+            onClick={() => {
+              deleteSiteAddress(item.id);
+            }}
+          >
+            Delete
           </Button>
         </>
       ),
-    }, */
     },
   ]);
+
+  const deleteSiteAddress = (id) => {
+    let params = { action: "DELETE_CONTACT_PERSON", id: id };
+    psApiCalling(params).then((res) => {
+      if (res.status === "success") {
+        toast.success(res.message);
+        getClientSites();
+      } else {
+        toast.error(res.message);
+      }
+    });
+  };
 
   const getClientSites = () => {
     let params = {
@@ -117,10 +140,12 @@ export default function ContactPersonList(props) {
   const onFinishUpdate = (value) => {
     setIsLoading(true);
     let params = {
-      action: "UPDATE_SITE_ADDRESS",
-      aid: updatedId,
-
-      address: value.site_address,
+      action: "UPDATE_CONTACT_PERSON",
+      cid: cid,
+      site_address: value.site_address,
+      name: value.name,
+      email: value.email,
+      phone: value.phone,
     };
     psApiCalling(params).then((res) => {
       setIsLoading(false);
@@ -160,44 +185,37 @@ export default function ContactPersonList(props) {
   }, [props.clientId, props.leadId]);
 
   return (
-    <Box>
-      <Box md={{ width: "100%" }} style={{ marginTop: "8px" }}>
+    <>
+      <Box style={{ marginTop: "8px" }}>
         <Grid
-          container
-          rowSpacing={1}
-          columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-          sx={{ flexDirection: { xs: "column", md: "row" } }}
+          md={12}
+          style={{
+            marginTop: "0px",
+            msOverflowStyle: "none",
+            scrollbarWidth: "0px",
+          }}
         >
-          <Grid
-            md={12}
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-            sx={{ flexDirection: { xs: "column", md: "row" } }}
-            style={{ marginTop: "0px" }}
+          <Card
+            title="Contact Person"
+            extra={
+              <Button
+                style={{ background: "#5f27cd", color: "#FFFFFF" }}
+                onClick={() => setOpen(true)}
+              >
+                Add New Contact Person
+              </Button>
+            }
+            style={{
+              marginTop: "30px",
+              msOverflowStyle: "none",
+            }}
           >
-            <Card
-              title="Contact Person"
-              style={{
-                width: "98%",
-                marginLeft: "1%",
-                marginTop: "30px",
-                overflow: "scroll",
-              }}
-              extra={
-                <Button
-                  style={{ background: "#5f27cd", color: "#FFFFFF" }}
-                  onClick={() => setOpen(true)}
-                >
-                  Add New Contact Person
-                </Button>
-              }
-            >
-              <Table data={data} col={col} />
-            </Card>
-          </Grid>
+            <Table data={data} col={col} />
+          </Card>
         </Grid>
       </Box>
+      <ToastContainer />
+
       <Modal
         title="Add New Contact Person"
         centered
@@ -303,7 +321,11 @@ export default function ContactPersonList(props) {
                   margin: "0 8px",
                 }}
               >
-                <Input placeholder="Phone Number" maxLength={10} />
+                <Input
+                  placeholder="Phone Number"
+                  maxLength={10}
+                  type="number"
+                />
               </Form.Item>
             </Form.Item>
             <Form.Item label=" " colon={false}>
@@ -332,7 +354,7 @@ export default function ContactPersonList(props) {
         </div>
       </Modal>
       <Modal
-        title="Add New Site"
+        title="Update Contact Person"
         centered
         open={update}
         width={600}
@@ -342,7 +364,7 @@ export default function ContactPersonList(props) {
         <Divider />
         <div>
           <Form
-            form={form}
+            form={updateForm}
             layout="vertical"
             style={{
               marginBottom: 0,
@@ -350,13 +372,12 @@ export default function ContactPersonList(props) {
             onFinish={onFinishUpdate}
           >
             <Form.Item
-              label="Site Address"
+              label="Select Site Address"
               name="site_address"
-              value={currentAdd}
               rules={[
                 {
                   required: true,
-                  message: "Site Address is required",
+                  message: "Site address is required",
                 },
               ]}
               style={{
@@ -364,7 +385,86 @@ export default function ContactPersonList(props) {
                 width: "calc(99.8% - 8px)",
               }}
             >
-              <Input placeholder="Site Address" value={currentAdd} />
+              <Select
+                style={{
+                  width: "100%",
+                }}
+                options={addressList}
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+              />
+            </Form.Item>
+            <Form.Item
+              label="Contact Person Name"
+              name="name"
+              rules={[
+                {
+                  required: true,
+                  message: "Name is required",
+                },
+              ]}
+              style={{
+                display: "inline-block",
+                width: "calc(99.8% - 8px)",
+              }}
+            >
+              <Input placeholder="Contact Person" />
+            </Form.Item>
+
+            <Form.Item
+              style={{
+                marginBottom: 0,
+              }}
+            >
+              <Form.Item
+                label="Contact Person Email"
+                name="email"
+                rules={[
+                  {
+                    required: true,
+                    message: "Contact person email is required",
+                  },
+                  {
+                    type: "email",
+                    message: "Email address is not valid",
+                  },
+                ]}
+                style={{
+                  display: "inline-block",
+                  width: "calc(50% - 8px)",
+                }}
+              >
+                <Input
+                  placeholder="Email Address"
+                  onInput={(e) =>
+                    (e.target.value = e.target.value.toLowerCase())
+                  }
+                />
+              </Form.Item>
+              <Form.Item
+                label="Contact Person Phone"
+                name="phone"
+                rules={[
+                  {
+                    required: true,
+                    message: "Phone number is required",
+                  },
+                ]}
+                style={{
+                  display: "inline-block",
+                  width: "calc(50% - 8px)",
+                  margin: "0 8px",
+                }}
+              >
+                <Input
+                  placeholder="Phone Number"
+                  maxLength={10}
+                  type="number"
+                />
+              </Form.Item>
             </Form.Item>
             <Form.Item label=" " colon={false}>
               {isLoading ? (
@@ -382,16 +482,15 @@ export default function ContactPersonList(props) {
                 <Button
                   type="primary"
                   htmlType="submit"
-                  style={{ width: "100%", background: "#feca57" }}
+                  style={{ width: "100%", background: "#3E4095" }}
                 >
-                  Update Site
+                  Update Contact Person
                 </Button>
               )}
             </Form.Item>
           </Form>
         </div>
       </Modal>
-      <ToastContainer />
-    </Box>
+    </>
   );
 }

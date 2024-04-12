@@ -21,6 +21,7 @@ export default function ManageSchedule() {
   const [id, setId] = useState(window.location.pathname.split("/")[2]);
   const [oid, setOId] = useState(window.location.pathname.split("/")[3]);
   const [serviceManList, setServiceManList] = useState([]);
+  const [maxDate, setMaxDate] = useState(null);
   const [clientDetails, setClientDetails] = useState({
     clientName: "",
     serviceName: "",
@@ -40,11 +41,6 @@ export default function ManageSchedule() {
   const [images, setImages] = useState([]);
   const [showDateRange, setShowDateRange] = useState(false);
 
-  const disabledDate = (current) => {
-    // Disable past dates
-    return current && current < moment().startOf("day");
-  };
-
   const getServiceImages = () => {
     let params = { action: "GET_ALL_SCHEDULE_SERVICE_IMAGE", sid: id };
     psApiCalling(params).then((res) => {
@@ -59,6 +55,7 @@ export default function ManageSchedule() {
     psApiCalling(params).then((res) => {
       if (res.status === "success") {
         setClientDetails(res);
+        setMaxDate(res.end_date);
       }
     });
   };
@@ -119,6 +116,16 @@ export default function ManageSchedule() {
       });
     }
   };
+  const disabledDate = (current) => {
+    console.log("current", current);
+    // Disable past dates
+    // return current && current < moment().startOf("day");
+    if (current && current < moment().startOf("day")) {
+      return true;
+    }
+    // Disable dates beyond the maximum date
+    return current && current > moment(maxDate).endOf("day");
+  };
 
   useEffect(() => {
     getCompletedServiceDetail();
@@ -158,9 +165,9 @@ export default function ManageSchedule() {
                     <Descriptions.Item label="Client Name">
                       {clientDetails.clientName}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Service Code">
+                    {/* <Descriptions.Item label="Service Code">
                       {oid}
-                    </Descriptions.Item>
+                    </Descriptions.Item> */}
                     <Descriptions.Item label="Service Type">
                       {clientDetails.serviceName}
                     </Descriptions.Item>

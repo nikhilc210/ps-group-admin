@@ -5,7 +5,7 @@ const psApiCalling = (params) => {
   return fetch(`${MAIN_URL}`, {
     method: "POST",
     body: JSON.stringify(params),
-    mode: "cors",
+    // mode: "no-cors",
     headers: {
       "Content-type": "application/json;charset=utf-8",
     },

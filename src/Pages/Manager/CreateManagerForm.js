@@ -226,7 +226,11 @@ export default function CreateManagerForm() {
                       margin: "0 8px",
                     }}
                   >
-                    <Input placeholder="Phone Number" maxLength={10} />
+                    <Input
+                      placeholder="Phone Number"
+                      maxLength={10}
+                      type="number"
+                    />
                   </Form.Item>
                 </Form.Item>
 
@@ -282,7 +286,11 @@ export default function CreateManagerForm() {
                       margin: "0 8px",
                     }}
                   >
-                    <Input placeholder="AADHAR Number" maxLength={12} />
+                    <Input
+                      placeholder="AADHAR Number"
+                      maxLength={12}
+                      type="number"
+                    />
                   </Form.Item>
                 </Form.Item>
 
@@ -347,7 +355,7 @@ export default function CreateManagerForm() {
                       margin: "0 8px",
                     }}
                   >
-                    <Input placeholder="Bank Account Number" />
+                    <Input placeholder="Bank Account Number" type="number" />
                   </Form.Item>
                 </Form.Item>
 

@@ -68,8 +68,8 @@ export default function EditList() {
         setIndustryList(
           res.map((item) => {
             return {
-              id: item.id,
-              value: item.type,
+              value: item.id,
+              label: item.type,
             };
           })
         );
@@ -223,6 +223,7 @@ export default function EditList() {
                               <Input
                                 placeholder="Client Phone Number"
                                 maxLength={10}
+                                type="number"
                               />
                             </Form.Item>
                             <Form.Item
@@ -262,6 +263,13 @@ export default function EditList() {
                                 style={{
                                   width: "100%",
                                 }}
+                                showSearch
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                  option.label
+                                    .toLowerCase()
+                                    .indexOf(input.toLowerCase()) >= 0
+                                }
                                 onChange={() => {}}
                                 options={industryList}
                               />
@@ -283,6 +291,13 @@ export default function EditList() {
                             >
                               <Select
                                 defaultValue="Select Status"
+                                showSearch
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                  option.label
+                                    .toLowerCase()
+                                    .indexOf(input.toLowerCase()) >= 0
+                                }
                                 style={{
                                   width: "100%",
                                 }}

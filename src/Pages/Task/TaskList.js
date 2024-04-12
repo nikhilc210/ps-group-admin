@@ -13,15 +13,20 @@ export default function TaskList() {
     //   dataIndex: "id",
     //   key: "id",
     // },
-    {
-      title: "Task Code",
-      key: "code",
-      render: (_, record) => <Tag color="blue">{_.code}</Tag>,
-    },
+    // {
+    //   title: "Task Code",
+    //   key: "code",
+    //   render: (_, record) => <Tag color="blue">{_.code}</Tag>,
+    // },
     {
       title: "Employee",
       key: "employee",
       render: (_, record) => <Tag color="green">{_.name}</Tag>,
+    },
+    {
+      title: "Time",
+      key: "time",
+      render: (_, record) => <Tag color="green">{_.time}</Tag>,
     },
     {
       title: "Action",

@@ -18,11 +18,10 @@ export default function CurrentService() {
         </Col>
         <Col md={10}>
           <Header />
-          <main>
-            <Container fluid>
-              <CurrentServiceList />
-            </Container>
-          </main>
+
+          <Container fluid>
+            <CurrentServiceList />
+          </Container>
         </Col>
       </Row>
     </Container>

@@ -13,6 +13,7 @@ import { Card, Tag } from "antd";
 import { ToastContainer, toast } from "react-toastify";
 import { Grid, Box } from "@mui/material";
 import moment from "moment";
+import dayjs from "dayjs";
 import { psApiCalling } from "../API/Index";
 const { Option } = Select;
 
@@ -25,7 +26,8 @@ export default function CreateLeadForm(props) {
   const [users, setUsers] = useState([]);
   const [reportingUser, setReportingUser] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
-
+  const [employee, setEmployee] = useState([]);
+  const [reporting, setReporting] = useState(null);
   const onFinish = (values) => {
     console.log(values);
 
@@ -108,16 +110,24 @@ export default function CreateLeadForm(props) {
   };
 
   useEffect(() => {
+    console.log("myreporting", data.reporting_to);
+  });
+
+  useEffect(() => {
+    console.log("users", employee);
+
+    console.log("reporting", reporting);
     form.setFieldsValue({
       employee_name: data.full_name,
-      employee_dob: moment(data.user_dob, "MM-DD-YYYY"),
+
+      employee_dob: dayjs(data.user_dob, "DD-MM-YYYY"),
       employee_gender: data.user_gender,
       employee_email: data.user_email,
       employee_role: data.employe_role,
       employee_password: data.password,
       phone_number: data.phone_number,
       employee_designation: data.employee_designation,
-      reporting: data.reporting_to,
+      reporting: { label: props.reporting, value: data.reporting_to },
       employee_type: data.user_type,
       aadhar: data.aadhar,
       pan_card: data.pan_card,
@@ -126,7 +136,13 @@ export default function CreateLeadForm(props) {
       account_number: data.account_number,
       employee_address: data.user_address,
     });
-  }, [props.data]);
+
+    let arr = allUsers.filter(
+      (item) => item.value === data.employee_designation
+    );
+    console.log("arr", arr);
+    //  console.log("users===>", users);
+  }, [props.data, reporting]);
 
   useEffect(() => {
     getManager();
@@ -190,7 +206,11 @@ export default function CreateLeadForm(props) {
               margin: "0 8px",
             }}
           >
-            <DatePicker onChange={onChangeDate} style={{ width: "100%" }} />
+            <DatePicker
+              format={"DD-MM-YYYY"}
+              onChange={onChangeDate}
+              style={{ width: "100%" }}
+            />
           </Form.Item>
         </Form.Item>
         <Form.Item
@@ -258,7 +278,6 @@ export default function CreateLeadForm(props) {
               placeholder="Email Address"
               inputMode={"email"}
               onInput={(e) => (e.target.value = e.target.value.toLowerCase())}
-              readOnly
             />
           </Form.Item>
         </Form.Item>
@@ -336,7 +355,7 @@ export default function CreateLeadForm(props) {
               width: "calc(50% - 8px)",
             }}
           >
-            <Input placeholder="Phone Number" maxLength={10} />
+            <Input placeholder="Phone Number" maxLength={10} type="number" />
           </Form.Item>
           <Form.Item
             label="Select Designation"
@@ -452,7 +471,7 @@ export default function CreateLeadForm(props) {
               margin: "0 8px",
             }}
           >
-            <Input placeholder="AADHAR Number" maxLength={12} />
+            <Input placeholder="AADHAR Number" maxLength={12} type="number" />
           </Form.Item>
         </Form.Item>
 
@@ -517,7 +536,7 @@ export default function CreateLeadForm(props) {
               margin: "0 8px",
             }}
           >
-            <Input placeholder="Bank Account Number" />
+            <Input placeholder="Bank Account Number" type="number" />
           </Form.Item>
         </Form.Item>
 

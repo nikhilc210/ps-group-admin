@@ -12,11 +12,11 @@ export default function LeadsCounter() {
     //   key: "id",
     //   render: (item, record) => <>{item.data.id}</>,
     // },
-    {
-      title: "Lead ID",
-      key: "lead_id",
-      render: (item, record) => <Tag color="green">{item.data.client_id}</Tag>,
-    },
+    // {
+    //   title: "Lead ID",
+    //   key: "lead_id",
+    //   render: (item, record) => <Tag color="green">{item.data.client_id}</Tag>,
+    // },
     {
       title: "Client Name",
       key: "client_name",
@@ -45,7 +45,7 @@ export default function LeadsCounter() {
       ),
     },
     {
-      title: "Client Sites",
+      title: "Add Sites",
 
       render: (item, record) => (
         <Button

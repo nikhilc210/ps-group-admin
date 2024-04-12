@@ -111,44 +111,36 @@ export default function SiteList(props) {
   }, []);
 
   return (
-    <Box>
-      <Box md={{ width: "100%" }} style={{ marginTop: "8px" }}>
+    <>
+      <Box style={{ marginTop: "8px" }}>
         <Grid
-          container
-          rowSpacing={1}
-          columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-          sx={{ flexDirection: { xs: "column", md: "row" } }}
+          md={12}
+          style={{
+            marginTop: "0px",
+            msOverflowStyle: "none",
+            scrollbarWidth: "0px",
+          }}
         >
-          <Grid
-            md={12}
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-            sx={{ flexDirection: { xs: "column", md: "row" } }}
-            style={{ marginTop: "0px" }}
+          <Card
+            title="Site Address"
+            extra={
+              <Button
+                style={{ background: "#5f27cd", color: "#FFFFFF" }}
+                onClick={() => setOpen(true)}
+              >
+                Add Site List
+              </Button>
+            }
+            style={{
+              marginTop: "30px",
+              msOverflowStyle: "none",
+            }}
           >
-            <Card
-              title="Site Address"
-              style={{
-                width: "98%",
-                marginLeft: "1%",
-                marginTop: "30px",
-                overflow: "scroll",
-              }}
-              extra={
-                <Button
-                  style={{ background: "#5f27cd", color: "#FFFFFF" }}
-                  onClick={() => setOpen(true)}
-                >
-                  Add Site List
-                </Button>
-              }
-            >
-              <Table data={data} col={col} />
-            </Card>
-          </Grid>
+            <Table data={data} col={col} />
+          </Card>
         </Grid>
       </Box>
+      <ToastContainer />
       <Modal
         title="Add New Site"
         centered
@@ -267,7 +259,6 @@ export default function SiteList(props) {
           </Form>
         </div>
       </Modal>
-      <ToastContainer />
-    </Box>
+    </>
   );
 }

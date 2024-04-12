@@ -336,7 +336,11 @@ export default function CreateLeadForm() {
                       width: "calc(50% - 8px)",
                     }}
                   >
-                    <Input placeholder="Phone Number" maxLength={10} />
+                    <Input
+                      placeholder="Phone Number"
+                      maxLength={10}
+                      type="number"
+                    />
                   </Form.Item>
                   <Form.Item
                     label="Select Designation"
@@ -468,7 +472,11 @@ export default function CreateLeadForm() {
                       margin: "0 8px",
                     }}
                   >
-                    <Input placeholder="AADHAR Number" maxLength={12} />
+                    <Input
+                      placeholder="AADHAR Number"
+                      maxLength={12}
+                      type="number"
+                    />
                   </Form.Item>
                 </Form.Item>
 
@@ -533,7 +541,7 @@ export default function CreateLeadForm() {
                       margin: "0 8px",
                     }}
                   >
-                    <Input placeholder="Bank Account Number" />
+                    <Input type="number" placeholder="Bank Account Number" />
                   </Form.Item>
                 </Form.Item>
 

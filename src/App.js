@@ -1,4 +1,5 @@
 import "@coreui/coreui/dist/css/coreui.min.css";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-medium-image-zoom/dist/styles.css";

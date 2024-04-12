@@ -27,17 +27,12 @@ export default function AdminList() {
       title: "Email Address",
       key: "emailAddress",
       render: (_, record) => <Tag color={"green"}>{_.emailAddress}</Tag>,
-      width: "180px",
+      width: "280px",
     },
     {
       title: "Admin Type",
       key: "adminType",
       render: (_, record) => <Tag color={"green"}>{_.adminType}</Tag>,
-    },
-    {
-      title: "Created Time",
-      key: "created_time",
-      render: (_, record) => <Tag color={"green"}>{_.created_time}</Tag>,
     },
 
     {
@@ -104,44 +99,36 @@ export default function AdminList() {
   }, []);
 
   return (
-    <Box>
-      <Box md={{ width: "100%" }} style={{ marginTop: "8px" }}>
+    <>
+      <Box style={{ marginTop: "8px" }}>
         <Grid
-          container
-          rowSpacing={1}
-          columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-          sx={{ flexDirection: { xs: "column", md: "row" } }}
+          md={12}
+          style={{
+            marginTop: "0px",
+            msOverflowStyle: "none",
+            scrollbarWidth: "0px",
+          }}
         >
-          <Grid
-            md={12}
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-            sx={{ flexDirection: { xs: "column", md: "row" } }}
-            style={{ marginTop: "0px" }}
+          <Card
+            title="Admin List"
+            extra={
+              <Button
+                href="/createAdmin"
+                style={{ background: "#5f27cd", color: "#FFFFFF" }}
+              >
+                Create New Admin
+              </Button>
+            }
+            style={{
+              marginTop: "30px",
+              msOverflowStyle: "none",
+            }}
           >
-            <Card
-              title="Admin List"
-              extra={
-                <Button
-                  href="/createAdmin"
-                  style={{ background: "#5f27cd", color: "#FFFFFF" }}
-                >
-                  Create New Admin
-                </Button>
-              }
-              style={{
-                width: "98%",
-                marginLeft: "1%",
-                marginTop: "30px",
-              }}
-            >
-              <Table data={data} col={col} />
-            </Card>
-          </Grid>
+            <Table data={data} col={col} />
+          </Card>
         </Grid>
       </Box>
       <ToastContainer />
-    </Box>
+    </>
   );
 }

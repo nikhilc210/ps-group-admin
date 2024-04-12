@@ -7,7 +7,7 @@ export default function Index(props) {
       <Table
         columns={props.col}
         dataSource={props.data}
-        scroll={{ x: "100%", y: "100%" }}
+        style={{ minHeight: "800px" }}
       />
     </div>
   );

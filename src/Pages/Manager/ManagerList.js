@@ -16,12 +16,12 @@ export default function ManagerList() {
     //   render: (_, record) => <>{_.data.id}</>,
     //   width: "50px",
     // },
-    {
-      title: "User Code",
-      key: "code",
-      render: (_, record) => <Tag color={"purple"}>{_.data.user_code}</Tag>,
-      width: "130px",
-    },
+    // {
+    //   title: "User Code",
+    //   key: "code",
+    //   render: (_, record) => <Tag color={"purple"}>{_.data.user_code}</Tag>,
+    //   width: "130px",
+    // },
     {
       title: "Fullname",
       key: "fullname",
@@ -57,12 +57,6 @@ export default function ManagerList() {
       key: "type",
       render: (_, record) => <Tag color={"#e58e26"}>{_.data.user_type}</Tag>,
       width: "180px",
-    },
-    {
-      title: "Created Time",
-      key: "created_time",
-      render: (_, record) => <Tag color={"#b71540"}>{_.data.created_time}</Tag>,
-      width: "150px",
     },
 
     {
@@ -137,45 +131,36 @@ export default function ManagerList() {
   }, []);
 
   return (
-    <Box style={{ width: "100%" }}>
+    <>
       <Box style={{ marginTop: "8px" }}>
         <Grid
-          container
-          rowSpacing={1}
-          columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-          md={{ flexDirection: { xs: "column", md: "row" } }}
+          md={12}
+          style={{
+            marginTop: "0px",
+            msOverflowStyle: "none",
+            scrollbarWidth: "0px",
+          }}
         >
-          <Grid
-            md={12}
-            style={{ width: "100%", marginTop: "0px" }}
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-            sx={{ flexDirection: { xs: "column", md: "row" } }}
+          <Card
+            title="Manager List"
+            extra={
+              <Button
+                href="/createManager"
+                style={{ background: "#5f27cd", color: "#FFFFFF" }}
+              >
+                Create New Manager
+              </Button>
+            }
+            style={{
+              marginTop: "30px",
+              msOverflowStyle: "none",
+            }}
           >
-            <Card
-              title="Manager List"
-              extra={
-                <Button
-                  href="/createManager"
-                  style={{ background: "#5f27cd", color: "#FFFFFF" }}
-                >
-                  Create New Manager
-                </Button>
-              }
-              style={{
-                width: "100%",
-                marginLeft: "1%",
-                marginTop: "30px",
-                overflow: "scroll",
-              }}
-            >
-              <Table data={data} col={col} />
-            </Card>
-          </Grid>
+            <Table data={data} col={col} />
+          </Card>
         </Grid>
       </Box>
       <ToastContainer />
-    </Box>
+    </>
   );
 }

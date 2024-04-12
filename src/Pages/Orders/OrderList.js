@@ -70,48 +70,36 @@ export default function OrderList() {
   }, []);
 
   return (
-    <Box>
-      <Box
-        md={{ width: "100%" }}
-        style={{ marginTop: "8px", overflow: "scroll" }}
-      >
+    <>
+      <Box style={{ marginTop: "8px" }}>
         <Grid
-          container
-          rowSpacing={1}
-          columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-          sx={{ flexDirection: { xs: "column", md: "row" } }}
+          md={12}
+          style={{
+            marginTop: "0px",
+            msOverflowStyle: "none",
+            scrollbarWidth: "0px",
+          }}
         >
-          <Grid
-            md={12}
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-            sx={{ flexDirection: { xs: "column", md: "row" } }}
-            style={{ marginTop: "0px" }}
+          <Card
+            title="Client's Schedule"
+            extra={
+              <Button
+                href="/createNewOrder"
+                style={{ background: "#5f27cd", color: "#FFFFFF" }}
+              >
+                Create New Schedule
+              </Button>
+            }
+            style={{
+              marginTop: "30px",
+              msOverflowStyle: "none",
+            }}
           >
-            <Card
-              title="Client's Schedule"
-              extra={
-                <Button
-                  href="/createNewOrder"
-                  style={{ background: "#5f27cd", color: "#FFFFFF" }}
-                >
-                  Create New Order
-                </Button>
-              }
-              style={{
-                width: "98%",
-                marginLeft: "1%",
-                marginTop: "30px",
-                overflow: "scroll",
-              }}
-            >
-              <Table data={data} col={col} />
-            </Card>
-          </Grid>
+            <Table data={data} col={col} />
+          </Card>
         </Grid>
       </Box>
       <ToastContainer />
-    </Box>
+    </>
   );
 }

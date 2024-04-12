@@ -116,11 +116,20 @@ export default function CreateNewOrder() {
     let params = { action: "GET_ALL_LEADS" };
     psApiCalling(params).then((res) => {
       if (Array.isArray(res)) {
+        let dataRes = res.map((item) => {
+          return {
+            value: item.data.id,
+            label: item.data.client_name,
+            status: item.data.status,
+          };
+        });
+        let filter = dataRes.filter((item) => item.status === "Deal Closed");
+
         setClientList(
-          res.map((item) => {
+          filter.map((item) => {
             return {
-              value: item.data.id,
-              label: item.data.client_name,
+              value: item.value,
+              label: item.label,
             };
           })
         );
@@ -206,7 +215,7 @@ export default function CreateNewOrder() {
         service_type: value.service_type,
         service_date: date,
         service_time: time,
-        repeat_every: value.repeat_every,
+        repeat_every: "1",
         repetation: value.repetation,
         ends_on: ends_on,
         service_guy: value.service_guy,
@@ -230,7 +239,7 @@ export default function CreateNewOrder() {
         service_type: value.service_type,
         service_date: date,
         service_time: time,
-        repeat_every: value.repeat_every,
+        repeat_every: "1",
         repetation: value.repetation,
         ends_on: ends_on,
         service_guy: value.service_guy,
@@ -260,6 +269,10 @@ export default function CreateNewOrder() {
   useEffect(() => {
     getServiceGuyList();
   }, []);
+  function disabledDate(current) {
+    // Can not select days before today
+    return current && current < moment().startOf("day");
+  }
   return (
     <Box>
       <Box md={{ width: "100%" }} style={{ marginTop: "8px" }}>
@@ -429,7 +442,10 @@ export default function CreateNewOrder() {
                       margin: "0 8px",
                     }}
                   >
-                    <DatePicker onChange={onChangeDate} />
+                    <DatePicker
+                      onChange={onChangeDate}
+                      disabledDate={disabledDate}
+                    />
                   </Form.Item>
                   <Form.Item
                     label="Service Time"
@@ -455,7 +471,7 @@ export default function CreateNewOrder() {
                     marginBottom: 0,
                   }}
                 >
-                  <Form.Item
+                  {/* <Form.Item
                     label="Repeat Every"
                     name="repeat_every"
                     rules={[
@@ -471,7 +487,7 @@ export default function CreateNewOrder() {
                     }}
                   >
                     <InputNumber min={1} max={365} style={{ width: "100%" }} />
-                  </Form.Item>
+                  </Form.Item> */}
                   <Form.Item
                     label="Repeation"
                     name="repetation"
@@ -483,7 +499,7 @@ export default function CreateNewOrder() {
                     ]}
                     style={{
                       display: "inline-block",
-                      width: "calc(50% - 8px)",
+                      width: "calc(100% - 16px)",
                     }}
                   >
                     <Select
@@ -491,6 +507,13 @@ export default function CreateNewOrder() {
                       style={{
                         width: "100%",
                       }}
+                      showSearch
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
                       onChange={(v) => {
                         if (v === "Weekly") {
                           setShowWeek(true);
@@ -531,6 +554,13 @@ export default function CreateNewOrder() {
                         style={{
                           width: "100% - 8px",
                         }}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.label
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }
                         onChange={(v) => {
                           if (v === "Day Wise") {
                             setShowWeek(true);
@@ -576,6 +606,13 @@ export default function CreateNewOrder() {
                           width: "100% - 8px",
                           marginLeft: "5px",
                         }}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.label
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }
                         onChange={(v) => {}}
                         options={[
                           {
@@ -623,6 +660,13 @@ export default function CreateNewOrder() {
                         onChange={(v) => {
                           console.log(v);
                         }}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.label
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }
                         options={[
                           {
                             label: "1",
@@ -896,7 +940,7 @@ export default function CreateNewOrder() {
                       htmlType="submit"
                       style={{ width: "100%", background: "#3E4095" }}
                     >
-                      Create New Order
+                      Create New Schedule
                     </Button>
                   </Form.Item>
                 )}

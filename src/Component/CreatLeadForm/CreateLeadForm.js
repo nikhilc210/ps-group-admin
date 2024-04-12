@@ -47,8 +47,8 @@ export default function CreateLeadForm() {
         setStatusList(
           res.map((item) => {
             return {
-              id: item.id,
-              value: item.status,
+              value: item.id,
+              label: item.status,
             };
           })
         );
@@ -184,7 +184,11 @@ export default function CreateLeadForm() {
                       width: "calc(50% - 8px)",
                     }}
                   >
-                    <Input placeholder="Client Phone Number" maxLength={10} />
+                    <Input
+                      placeholder="Client Phone Number"
+                      maxLength={10}
+                      type="number"
+                    />
                   </Form.Item>
                   <Form.Item
                     label="Client GST"
@@ -251,10 +255,16 @@ export default function CreateLeadForm() {
                   >
                     <Select
                       defaultValue="Select Status"
+                      showSearch
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
                       style={{
                         width: "100%",
                       }}
-                      onChange={() => {}}
                       options={statusList}
                     />
                   </Form.Item>
@@ -302,6 +312,13 @@ export default function CreateLeadForm() {
                         width: "100%",
                       }}
                       onChange={() => {}}
+                      showSearch
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
                       options={[
                         {
                           label: "Commercial",

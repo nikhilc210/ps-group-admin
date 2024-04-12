@@ -128,7 +128,11 @@ export default function CreateAdminForm() {
                       width: "calc(50% - 8px)",
                     }}
                   >
-                    <Input placeholder="Admin Phone Number" maxLength={10} />
+                    <Input
+                      placeholder="Admin Phone Number"
+                      maxLength={10}
+                      type="number"
+                    />
                   </Form.Item>
                   <Form.Item
                     label="Password"

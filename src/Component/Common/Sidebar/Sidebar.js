@@ -17,6 +17,7 @@ import {
   MdHomeRepairService,
   MdOutlineFavoriteBorder,
 } from "react-icons/md";
+import { FaCalendarAlt } from "react-icons/fa";
 import { CgCalendarToday } from "react-icons/cg";
 import { AiOutlinePullRequest } from "react-icons/ai";
 import { GrStatusGood } from "react-icons/gr";
@@ -104,7 +105,7 @@ export default function Sidebar(props) {
         menu: "Schedule",
         link: "/orders",
         icon: (
-          <MdOutlineFavoriteBorder
+          <FaCalendarAlt
             customClassName="nav-icon"
             style={{ marginRight: "10px" }}
             color={"#ffffff"}
@@ -264,6 +265,7 @@ export default function Sidebar(props) {
                 <CNavItem
                   href={item.link}
                   active={item.link === to ? true : false}
+                  style={{ color: "#FFFFFF" }}
                 >
                   {item.icon} {item.menu}
                 </CNavItem>

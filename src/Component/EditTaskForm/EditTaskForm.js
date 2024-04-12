@@ -19,7 +19,7 @@ import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import moment from "moment";
 import DatePickerNew from "react-multi-date-picker";
-
+import dayjs from "dayjs";
 const { Option } = Select;
 
 export default function CreateTaskForm(props) {
@@ -145,99 +145,105 @@ export default function CreateTaskForm(props) {
   };
 
   const onFinish = (value) => {
-    // let day = [];
-    // let ends_on;
-    // if (value.ends_on === undefined) {
-    //   ends_on = "1";
-    // } else {
-    //   ends_on = value.ends_on;
-    // }
-    // if (value.repetation === "Weekly") {
-    //   days.map((item) => {
-    //     if (item.checked === true) {
-    //       day.push(item.id);
-    //     }
-    //   });
-    // } else {
-    // }
-    // if (value.repetation === "Monthly") {
-    //   let day = [];
-    //   let week;
-    //   let selected_day;
-    //   if (value.week === undefined) {
-    //     week = "";
-    //   } else {
-    //     week = value.week;
-    //   }
-    //   days.map((item) => {
-    //     if (item.checked === true) {
-    //       day.push(item.id);
-    //     }
-    //   });
-    //   if (value.selected_day === undefined) {
-    //     selected_day = "";
-    //   } else {
-    //     selected_day = value.selected_day;
-    //   }
-    //   let params = {
-    //     employee_name: value.employee_name,
-    //     start_date: date,
-    //     time: time,
-    //     repeat_every: value.repeat_every,
-    //     repetation: value.repetation,
-    //     ends_on: ends_on,
-    //     type: value.type,
-    //     week: week,
-    //     selected_day: selected_day,
-    //     days: day,
-    //     task: value.task,
-    //     task_header: value.task_header,
-    //     created_by: value.created_by,
-    //     priority: value.priority,
-    //     action: "CREATE_TASK_FOR_MONTH",
-    //   };
-    //   psApiCalling(params).then((res) => {
-    //     if (res.status === "success") {
-    //       toast.success(res.message);
-    //     } else {
-    //       toast.error(res.message);
-    //     }
-    //   });
-    // } else {
-    //   let params = {
-    //     employee_name: value.employee_name,
-    //     start_date: date,
-    //     time: time,
-    //     repeat_every: value.repeat_every,
-    //     repetation: value.repetation,
-    //     ends_on: ends_on,
-    //     action: "CREATE_NEW_TASK",
-    //     days: day,
-    //     task_header: value.task_header,
-    //     created_by: value.created_by,
-    //     priority: value.priority,
-    //     task: value.task,
-    //   };
-    //   console.log("params======>", params);
-    //   psApiCalling(params).then((res) => {
-    //     if (res.status === "success") {
-    //       toast.success(res.message);
-    //     } else {
-    //       toast.error(res.message);
-    //     }
-    //   });
-    // }
+    let day = [];
+    let ends_on;
+    if (value.ends_on === undefined) {
+      ends_on = "1";
+    } else {
+      ends_on = value.ends_on;
+    }
+    if (value.repetation === "Weekly") {
+      days.map((item) => {
+        if (item.checked === true) {
+          day.push(item.id);
+        }
+      });
+    } else {
+    }
+    if (value.repetation === "Monthly") {
+      let day = [];
+      let week;
+      let selected_day;
+      if (value.week === undefined) {
+        week = "";
+      } else {
+        week = value.week;
+      }
+      days.map((item) => {
+        if (item.checked === true) {
+          day.push(item.id);
+        }
+      });
+      if (value.selected_day === undefined) {
+        selected_day = "";
+      } else {
+        selected_day = value.selected_day;
+      }
+      let params = {
+        employee_name: value.employee_name,
+        start_date: date,
+        time: time,
+        repeat_every: value.repeat_every,
+        repetation: value.repetation,
+        ends_on: ends_on,
+        type: value.type,
+        week: week,
+        selected_day: selected_day,
+        days: day,
+        task: value.task,
+        task_header: value.task_header,
+        created_by: value.created_by,
+        priority: value.priority,
+        id: id,
+        code: code,
+        action: "UPDATE_TASK_FOR_MONTH",
+      };
+      psApiCalling(params).then((res) => {
+        if (res.status === "success") {
+          toast.success(res.message);
+        } else {
+          toast.error(res.message);
+        }
+      });
+    } else {
+      let params = {
+        employee_name: value.employee_name,
+        start_date: date,
+        time: time,
+        repeat_every: value.repeat_every,
+        repetation: value.repetation,
+        ends_on: ends_on,
+        action: "UPDATE_NEW_TASK",
+        days: day,
+        task_header: value.task_header,
+        created_by: value.created_by,
+        priority: value.priority,
+        task: value.task,
+        id: id,
+        code: code,
+      };
+      console.log("params======>", params);
+      psApiCalling(params).then((res) => {
+        if (res.status === "success") {
+          toast.success(res.message);
+        } else {
+          toast.error(res.message);
+        }
+      });
+    }
   };
 
   const getTaskDetail = (id) => {
     let params = { action: "GET_TASK_DETAILS", id: id };
     psApiCalling(params).then((res) => {
+      setDate(res.data.start_date);
+      setTime(res.data.time);
       form.setFieldsValue({
         created_by: res.data.by_id,
         priority: res.data.priority,
         employee_name: res.data.eid,
-        start_date: moment(res.data.start_date, "YYYY-MM-DD"),
-        start_time: moment(res.data.time, "HH:mm:ss"),
+        start_date: dayjs(res.data.start_date, "YYYY-MM-DD"),
+        start_time: dayjs(res.data.time, "HH:mm a"),
         repeat_every: res.data.repeat_every,
         repetation: res.data.repetation,
         ends_on: res.data.ends_on,
@@ -373,6 +379,13 @@ export default function CreateTaskForm(props) {
                   >
                     <Select
                       defaultValue="Select Priority"
+                      showSearch
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
                       style={{
                         width: "100%",
                       }}
@@ -520,6 +533,13 @@ export default function CreateTaskForm(props) {
                       style={{
                         width: "100%",
                       }}
+                      showSearch
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
                       onChange={(v) => {
                         if (v === "Weekly") {
                           setShowWeek(true);
@@ -560,6 +580,13 @@ export default function CreateTaskForm(props) {
                         style={{
                           width: "100% - 8px",
                         }}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.label
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }
                         onChange={(v) => {
                           if (v === "Day Wise") {
                             setShowWeek(true);
@@ -605,6 +632,13 @@ export default function CreateTaskForm(props) {
                           width: "100% - 8px",
                           marginLeft: "5px",
                         }}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.label
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }
                         onChange={(v) => {}}
                         options={[
                           {
@@ -649,6 +683,13 @@ export default function CreateTaskForm(props) {
                           width: "100% - 8px",
                           marginLeft: "5px",
                         }}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.label
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }
                         onChange={(v) => {
                           console.log(v);
                         }}
