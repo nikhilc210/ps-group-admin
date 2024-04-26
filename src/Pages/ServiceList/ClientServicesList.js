@@ -42,12 +42,12 @@ export default function ClientServicesList() {
       key: "start_date",
       width: "auto",
     },
-    {
-      title: "Time",
-      render: (item, record) => <Tag color="#00d8d6">{item.service_time}</Tag>,
-      key: "time",
-      width: "auto",
-    },
+    // {
+    //   title: "Time",
+    //   render: (item, record) => <Tag color="#00d8d6">{item.service_time}</Tag>,
+    //   key: "time",
+    //   width: "auto",
+    // },
     {
       title: "End Date",
       render: (item, record) => (
@@ -59,32 +59,32 @@ export default function ClientServicesList() {
       key: "end_date",
       width: "auto",
     },
-    {
-      title: "No of Service",
-      render: (item, record) => <Tag color="#ffdd59">{item.no_service}</Tag>,
-      key: "no_service",
-      width: "auto",
-    },
+    // {
+    //   title: "No of Service",
+    //   render: (item, record) => <Tag color="#ffdd59">{item.no_service}</Tag>,
+    //   key: "no_service",
+    //   width: "auto",
+    // },
     {
       title: "Employee",
       render: (item, record) => <Tag color="#3c40c6">{item.service_guy}</Tag>,
       key: "service_guy",
       width: "auto",
     },
-    {
-      title: "Status",
-      render: (item, record) => (
-        <>
-          {item.status === "Pending" ? (
-            <Tag color="#ffd32a">{item.status}</Tag>
-          ) : (
-            <Tag color="#0be881">{item.status}</Tag>
-          )}
-        </>
-      ),
-      key: "status",
-      width: "auto",
-    },
+    // {
+    //   title: "Status",
+    //   render: (item, record) => (
+    //     <>
+    //       {item.status === "Pending" ? (
+    //         <Tag color="#ffd32a">{item.status}</Tag>
+    //       ) : (
+    //         <Tag color="#0be881">{item.status}</Tag>
+    //       )}
+    //     </>
+    //   ),
+    //   key: "status",
+    //   width: "auto",
+    // },
     {
       title: "View Details",
       key: "action",
@@ -96,6 +96,20 @@ export default function ClientServicesList() {
             href={"/viewSchedule/" + item.serviceCode + "/" + item.cname}
           >
             View Schedule
+          </Button>
+        </>
+      ),
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (item, record) => (
+        <>
+          <Button
+            type="primary"
+            href={"/editService/" + item.id + "/" + item.serviceCode}
+          >
+            Edit
           </Button>
         </>
       ),

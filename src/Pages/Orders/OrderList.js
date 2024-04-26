@@ -31,20 +31,20 @@ export default function OrderList() {
         </>
       ),
     },
-    {
-      title: "Action",
-      key: "action",
-      render: (item, record) => (
-        <>
-          <Button
-            type="primary"
-            href={"/editService/" + item.id + "/" + item.serviceCode}
-          >
-            Edit
-          </Button>
-        </>
-      ),
-    },
+    // {
+    //   title: "Action",
+    //   key: "action",
+    //   render: (item, record) => (
+    //     <>
+    //       <Button
+    //         type="primary"
+    //         href={"/editService/" + item.id + "/" + item.serviceCode}
+    //       >
+    //         Edit
+    //       </Button>
+    //     </>
+    //   ),
+    // },
   ]);
 
   const getLeadList = () => {

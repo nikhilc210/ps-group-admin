@@ -19,7 +19,7 @@ import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import moment from "moment";
 import DatePickerNew from "react-multi-date-picker";
-
+import dayjs from "dayjs";
 const { Option } = Select;
 
 export default function UpdateOrder(props) {
@@ -39,6 +39,7 @@ export default function UpdateOrder(props) {
   const [showType, setShowType] = useState(false);
   const [weekDayType, setWeekDayType] = useState(false);
   const [showOcu, setShowOcu] = useState(true);
+  const [service_date, setServiceDate] = useState(null);
   const [repeation, setRepeation] = useState([
     {
       label: "Does not repeat",
@@ -259,15 +260,18 @@ export default function UpdateOrder(props) {
 
   const getOrderDetail = () => {
     let params = { action: "GET_ORDER_DETAILS", oid: oid };
+
     psApiCalling(params).then((res) => {
       console.log(res);
       if (res.status === "success") {
+        setServiceDate(res.data.start_date);
         form.setFieldsValue({
           client_name: res.data.cid,
           client_site: res.data.site_id,
           service_type: res.data.service_type,
-          service_date: moment(res.data.start_date, "YYYY-MM-DD"),
-          service_time: moment(res.data.service_time, "HH:mm"),
+
+          service_date: dayjs(res.data.start_date, "YYYY-MM-DD"),
+          service_time: dayjs(res.data.service_time, "HH:mm"),
           // repeat_every: res.data.repeat_every,
           repetation: res.data.repetation,
           ends_on: res.data.ends_on,
@@ -291,6 +295,11 @@ export default function UpdateOrder(props) {
       }
     });
   };
+
+  function disabledDate(current) {
+    // Can not select days before today
+    return current && current < moment(service_date, "YYYY-MM-DD");
+  }
 
   useEffect(() => {
     getAllClientList();
@@ -482,7 +491,10 @@ export default function UpdateOrder(props) {
                       margin: "0 8px",
                     }}
                   >
-                    <DatePicker onChange={onChangeDate} />
+                    <DatePicker
+                      onChange={onChangeDate}
+                      disabledDate={disabledDate}
+                    />
                   </Form.Item>
                   <Form.Item
                     label="Service Time"
@@ -531,7 +543,7 @@ export default function UpdateOrder(props) {
                     rules={[
                       {
                         required: true,
-                        message: "Repeation is required",
+                        message: "Repetition is required",
                       },
                     ]}
                     style={{
@@ -540,7 +552,7 @@ export default function UpdateOrder(props) {
                     }}
                   >
                     <Select
-                      defaultValue="Select Service Repetation"
+                      defaultValue="Select Service Repetition"
                       style={{
                         width: "100%",
                       }}
@@ -566,6 +578,9 @@ export default function UpdateOrder(props) {
                           setShowOcu(false);
                         } else if (v === "Daily") {
                           setShowOcu(true);
+                          setShowWeek(false);
+                          setShowType(false);
+                          setShowOcu(false);
                         }
                       }}
                       options={repeation}

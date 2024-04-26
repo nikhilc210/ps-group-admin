@@ -40,6 +40,9 @@ export default function ManageSchedule() {
   const [completedDetail, setCompletedDetail] = useState({});
   const [images, setImages] = useState([]);
   const [showDateRange, setShowDateRange] = useState(false);
+  const [startDate, setStartDate] = useState(
+    window.location.pathname.split("/")[4]
+  );
 
   const getServiceImages = () => {
     let params = { action: "GET_ALL_SCHEDULE_SERVICE_IMAGE", sid: id };
@@ -117,14 +120,14 @@ export default function ManageSchedule() {
     }
   };
   const disabledDate = (current) => {
-    console.log("current", current);
-    // Disable past dates
-    // return current && current < moment().startOf("day");
-    if (current && current < moment().startOf("day")) {
-      return true;
-    }
-    // Disable dates beyond the maximum date
-    return current && current > moment(maxDate).endOf("day");
+    const today = moment().startOf("day");
+    console.log(startDate, maxDate);
+
+    return (
+      current &&
+      (current < moment(startDate, "YYYY-MM-DD") ||
+        current > moment(maxDate, "YYYY-MM-DD").endOf("day"))
+    );
   };
 
   useEffect(() => {

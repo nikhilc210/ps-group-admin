@@ -489,12 +489,12 @@ export default function CreateNewOrder() {
                     <InputNumber min={1} max={365} style={{ width: "100%" }} />
                   </Form.Item> */}
                   <Form.Item
-                    label="Repeation"
+                    label="Repetition"
                     name="repetation"
                     rules={[
                       {
                         required: true,
-                        message: "Repeation is required",
+                        message: "Repetition is required",
                       },
                     ]}
                     style={{
@@ -503,7 +503,7 @@ export default function CreateNewOrder() {
                     }}
                   >
                     <Select
-                      defaultValue="Select Service Repetation"
+                      defaultValue="Select Service Repetition"
                       style={{
                         width: "100%",
                       }}
@@ -528,6 +528,9 @@ export default function CreateNewOrder() {
                           setShowType(false);
                           setShowOcu(false);
                         } else if (v === "Daily") {
+                          setShowOcu(true);
+                          setShowWeek(false);
+                          setShowType(false);
                           setShowOcu(true);
                         }
                       }}

@@ -59,7 +59,7 @@ export default function ScheduleList(props) {
           {item.status === "Pending" ? (
             <Button
               type="primary"
-              href={"/manageSchedule/" + item.id + "/" + oid}
+              href={"/manageSchedule/" + item.id + "/" + oid + "/" + item.date}
             >
               Manage Schedule
             </Button>

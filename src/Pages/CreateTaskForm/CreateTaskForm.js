@@ -184,7 +184,7 @@ export default function CreateTaskForm() {
         employee_name: value.employee_name,
         start_date: date,
         time: time,
-        repeat_every: value.repeat_every,
+        repeat_every: "1",
         repetation: value.repetation,
         ends_on: ends_on,
         type: value.type,
@@ -209,7 +209,7 @@ export default function CreateTaskForm() {
         employee_name: value.employee_name,
         start_date: date,
         time: time,
-        repeat_every: value.repeat_every,
+        repeat_every: "1",
         repetation: value.repetation,
         ends_on: ends_on,
         action: "CREATE_NEW_TASK",
@@ -229,6 +229,11 @@ export default function CreateTaskForm() {
       });
     }
   };
+
+  function disabledDate(current) {
+    // Can not select days before today
+    return current && current < moment().startOf("day");
+  }
 
   useEffect(() => {
     getAllEmployeeList();
@@ -424,6 +429,7 @@ export default function CreateTaskForm() {
                     <DatePicker
                       onChange={onChangeDate}
                       style={{ width: "100%" }}
+                      disabledDate={disabledDate}
                     />
                   </Form.Item>
                   <Form.Item
@@ -454,7 +460,7 @@ export default function CreateTaskForm() {
                     marginBottom: 0,
                   }}
                 >
-                  <Form.Item
+                  {/* <Form.Item
                     label="Repeat Every"
                     name="repeat_every"
                     rules={[
@@ -470,23 +476,23 @@ export default function CreateTaskForm() {
                     }}
                   >
                     <InputNumber min={1} max={365} style={{ width: "100%" }} />
-                  </Form.Item>
+                  </Form.Item> */}
                   <Form.Item
-                    label="Repeation"
+                    label="Repetition"
                     name="repetation"
                     rules={[
                       {
                         required: true,
-                        message: "Repeation is required",
+                        message: "Repetition is required",
                       },
                     ]}
                     style={{
                       display: "inline-block",
-                      width: "calc(50% - 8px)",
+                      width: "calc(100% - 16px)",
                     }}
                   >
                     <Select
-                      defaultValue="Select Task Repetation"
+                      defaultValue="Select Task Repetition"
                       style={{
                         width: "100%",
                       }}
@@ -512,6 +518,9 @@ export default function CreateTaskForm() {
                           setShowOcu(false);
                         } else if (v === "Daily") {
                           setShowOcu(true);
+                          setShowWeek(false);
+                          setShowType(false);
+                          // setShowOcu(false);
                         }
                       }}
                       options={repeation}

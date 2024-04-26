@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Box } from "@mui/material";
 import { Card, Space, Button, Tag } from "antd";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer, toast, useToast } from "react-toastify";
 import Table from "../../Component/Table/Table";
 import { psApiCalling } from "../../Component/API/Index";
 
@@ -72,13 +72,55 @@ export default function LeadList() {
       title: "Approved By",
 
       key: "by",
+      render: (item) => (
+        <>{item.approved_by === "0" ? <p>-</p> : <p>{item.aname}</p>}</>
+      ),
     },
     {
       title: "Action",
       key: "action",
-      render: (_, record) => <></>,
+      render: (_, record) => (
+        <>
+          {_.status === "0" ? (
+            <Button type="primary" onClick={() => approveLeave(_.id)}>
+              Approve
+            </Button>
+          ) : (
+            <Button danger onClick={() => rejectLeave(_.id)}>
+              Reject
+            </Button>
+          )}
+        </>
+      ),
     },
   ]);
+
+  const approveLeave = (id) => {
+    //console.log(id);
+    const uid = localStorage.getItem("psAdminSessionID");
+    let params = { action: "APPROVE_LEAVE", id: id, uid: uid };
+    psApiCalling(params).then((res) => {
+      if (res.status === "success") {
+        toast.success(res.message);
+        getLeadList();
+      } else {
+        toast.error(res.message);
+      }
+    });
+  };
+
+  const rejectLeave = (id) => {
+    const uid = localStorage.getItem("psAdminSessionID");
+    let params = { action: "REJECT_LEAVE", id: id, uid: uid };
+    psApiCalling(params).then((res) => {
+      if (res.status === "success") {
+        toast.success(res.message);
+        getLeadList();
+      } else {
+        toast.error(res.message);
+      }
+    });
+  };
 
   const getLeadList = () => {
     let params = { action: "GET_LEAVE_LIST" };

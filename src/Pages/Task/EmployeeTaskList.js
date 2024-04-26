@@ -4,6 +4,7 @@ import { Card, Space, Button, Tag } from "antd";
 import { ToastContainer, toast } from "react-toastify";
 import Table from "../../Component/Table/Table";
 import { psApiCalling } from "../../Component/API/Index";
+import moment from "moment";
 
 export default function EmployeeTaskList(props) {
   const [data, setData] = useState([]);
@@ -16,7 +17,9 @@ export default function EmployeeTaskList(props) {
     {
       title: "Task Date",
       key: "date",
-      render: (_, record) => <Tag color="blue">{_.date}</Tag>,
+      render: (_, record) => (
+        <Tag color="blue">{moment(_.date).format("DD-MM-YYYY")}</Tag>
+      ),
     },
     {
       title: "Task",
@@ -26,7 +29,25 @@ export default function EmployeeTaskList(props) {
     {
       title: "Status",
       key: "action",
-      render: (_, record) => <>-</>,
+      render: (_, record) => (
+        <>
+          {_.status === "Pending" ? (
+            <Tag color="#f1c40f">{_.status}</Tag>
+          ) : (
+            <Tag color="#27ae60">{_.status}</Tag>
+          )}
+        </>
+      ),
+    },
+    {
+      title: "Updated Date",
+      key: "task",
+      render: (_, record) => <p>{moment(_.new_date).format("DD-MM-YYYY")}</p>,
+    },
+    {
+      title: "Comment",
+      key: "task",
+      render: (_, record) => <p>{_.comment}</p>,
     },
   ]);
 

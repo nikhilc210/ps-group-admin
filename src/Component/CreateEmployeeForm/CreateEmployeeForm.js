@@ -330,6 +330,10 @@ export default function CreateLeadForm() {
                         required: true,
                         message: "Employee Phone is required",
                       },
+                      {
+                        pattern: /^[\d]{0,10}$/,
+                        message: "Value should be 10 character",
+                      },
                     ]}
                     style={{
                       display: "inline-block",
@@ -464,6 +468,10 @@ export default function CreateLeadForm() {
                       {
                         required: true,
                         message: "Employee aadhar is required",
+                      },
+                      {
+                        pattern: /^[\d]{0,12}$/,
+                        message: "Value should be 12 character",
                       },
                     ]}
                     style={{

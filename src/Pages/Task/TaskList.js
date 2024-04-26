@@ -24,6 +24,23 @@ export default function TaskList() {
       render: (_, record) => <Tag color="green">{_.name}</Tag>,
     },
     {
+      title: "Priority",
+      key: "priority",
+      render: (_, record) => (
+        <>
+          {_.priority === "High" ? (
+            <Tag color="#e74c3c">{_.priority}</Tag>
+          ) : _.priority === "Medium" ? (
+            <Tag color="#f1c40f">{_.priority}</Tag>
+          ) : _.priority === "Low" ? (
+            <Tag color="#2ecc71">{_.priority}</Tag>
+          ) : (
+            <Tag color="green">{_.priority}</Tag>
+          )}
+        </>
+      ),
+    },
+    {
       title: "Time",
       key: "time",
       render: (_, record) => <Tag color="green">{_.time}</Tag>,

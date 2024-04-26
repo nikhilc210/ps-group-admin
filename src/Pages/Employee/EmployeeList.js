@@ -167,7 +167,7 @@ export default function EmployeeList() {
   };
 
   const getEmployeList = () => {
-    let params = { action: "GET_EMPLOYEE_LIST" };
+    let params = { action: "GET_EMPLOYEE_LIST_ALL" };
     psApiCalling(params).then((res) => {
       if (Array.isArray(res)) {
         setData(res);

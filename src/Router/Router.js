@@ -85,7 +85,7 @@ export default function Index() {
         ></Route>
         <Route path="/viewService/:id/:oid" element={<ViewService />}></Route>
         <Route
-          path="/manageSchedule/:id/:oid"
+          path="/manageSchedule/:id/:oid/:date"
           element={<ManageSchedule />}
         ></Route>
         <Route path="/currentService" element={<CurrentService />}></Route>

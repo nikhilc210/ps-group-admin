@@ -53,6 +53,7 @@ export default function CreateTaskForm(props) {
   const [showType, setShowType] = useState(false);
   const [weekDayType, setWeekDayType] = useState(false);
   const [showOcu, setShowOcu] = useState(true);
+  const [startDate, setStartDate] = useState(null);
   const [repeation, setRepeation] = useState([
     {
       label: "Does not repeat",
@@ -183,7 +184,7 @@ export default function CreateTaskForm(props) {
         employee_name: value.employee_name,
         start_date: date,
         time: time,
-        repeat_every: value.repeat_every,
+        repeat_every: "1",
         repetation: value.repetation,
         ends_on: ends_on,
         type: value.type,
@@ -210,7 +211,7 @@ export default function CreateTaskForm(props) {
         employee_name: value.employee_name,
         start_date: date,
         time: time,
-        repeat_every: value.repeat_every,
+        repeat_every: "1",
         repetation: value.repetation,
         ends_on: ends_on,
         action: "UPDATE_NEW_TASK",
@@ -264,9 +265,17 @@ export default function CreateTaskForm(props) {
         setShowOcu(false);
       } else if (res.data.repetation === "Daily") {
         setShowOcu(true);
+        setShowWeek(false);
+        setShowType(false);
+        setShowOcu(false);
       }
     });
   };
+
+  function disabledDate(current) {
+    // Can not select days before today
+    return current && current < moment(date, "YYYY-MM-DD").endOf("day");
+  }
 
   useEffect(() => {
     getTaskDetail(id);
@@ -467,6 +476,7 @@ export default function CreateTaskForm(props) {
                     <DatePicker
                       onChange={onChangeDate}
                       style={{ width: "100%" }}
+                      // disabledDate={disabledDate}
                     />
                   </Form.Item>
                   <Form.Item
@@ -497,7 +507,7 @@ export default function CreateTaskForm(props) {
                     marginBottom: 0,
                   }}
                 >
-                  <Form.Item
+                  {/* <Form.Item
                     label="Repeat Every"
                     name="repeat_every"
                     rules={[
@@ -513,23 +523,23 @@ export default function CreateTaskForm(props) {
                     }}
                   >
                     <InputNumber min={1} max={365} style={{ width: "100%" }} />
-                  </Form.Item>
+                  </Form.Item> */}
                   <Form.Item
-                    label="Repeation"
+                    label="Repetition"
                     name="repetation"
                     rules={[
                       {
                         required: true,
-                        message: "Repeation is required",
+                        message: "Repetition is required",
                       },
                     ]}
                     style={{
                       display: "inline-block",
-                      width: "calc(50% - 8px)",
+                      width: "calc(100% - 16px)",
                     }}
                   >
                     <Select
-                      defaultValue="Select Task Repetation"
+                      defaultValue="Select Task Repetition"
                       style={{
                         width: "100%",
                       }}
@@ -555,6 +565,9 @@ export default function CreateTaskForm(props) {
                           setShowOcu(false);
                         } else if (v === "Daily") {
                           setShowOcu(true);
+                          setShowWeek(false);
+                          setShowType(false);
+                          //  setShowOcu(false);
                         }
                       }}
                       options={repeation}

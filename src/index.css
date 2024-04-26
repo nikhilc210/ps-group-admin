@@ -17,3 +17,7 @@ code {
 ::-webkit-scrollbar {
   display: none;
 } */
+
+.ant-table-thead .ant-table-cell {
+  background-color: #f1f1f1 !important;
+}
